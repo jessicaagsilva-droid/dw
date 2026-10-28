@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Funil Correios com Gateway XPay Brasil e Vercel",
   "scripts": {
+    "build": "echo Build OK",
     "start": "node local-server.js"
   },
   "engines": {
