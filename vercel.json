@@ -19,6 +19,7 @@
     }
   ],
   "rewrites": [
+    { "source": "/", "destination": "/index.html" },
     { "source": "/api/create-pix", "destination": "/api/create-pix" },
     { "source": "/api/check-status", "destination": "/api/check-status" },
     { "source": "/.netlify/functions/create-pix", "destination": "/api/create-pix" },
