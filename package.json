@@ -1,0 +1,13 @@
+{
+  "name": "correios-xpay-pix",
+  "version": "1.0.0",
+  "description": "Funil Correios com Gateway XPay Brasil e Netlify Functions",
+  "main": "server.js",
+  "scripts": {
+    "build": "echo Build OK",
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

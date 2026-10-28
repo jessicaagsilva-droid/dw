@@ -1,0 +1,22 @@
+﻿# API Endpoints de Pagamento XPay Brasil
+/api/create-pix                             /.netlify/functions/create-pix 200!
+/api/check-status                           /.netlify/functions/check-status 200!
+/.netlify/functions/create-pix              /.netlify/functions/create-pix 200!
+/.netlify/functions/check-status            /.netlify/functions/check-status 200!
+
+# Rotas estaticas do Funil
+/correios                                   /index.html 200
+/correios/                                  /index.html 200
+/1/confirmacao                              /1/confirmacao/index.html 200
+/1/confirmacao/                             /1/confirmacao/index.html 200
+/2/encomenda                                /2/encomenda/index.html 200
+/2/encomenda/                               /2/encomenda/index.html 200
+/upsell/1                                   /upsell/1/index.html 200
+/upsell/1/                                  /upsell/1/index.html 200
+/upsell/2                                   /upsell/2/index.html 200
+/upsell/2/                                  /upsell/2/index.html 200
+/upsell/3                                   /upsell/3/index.html 200
+/upsell/3/                                  /upsell/3/index.html 200
+/obrigado                                   /obrigado/index.html 200
+/obrigado/                                  /obrigado/index.html 200
+/*                                          /200.html 200

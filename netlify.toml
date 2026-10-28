@@ -1,0 +1,78 @@
+[build]
+  publish = "."
+  functions = "netlify/functions"
+  command = "echo Build OK"
+
+[functions]
+  node_bundler = "esbuild"
+
+# Headers globais para liberar CORS sem restrição
+[[headers]]
+  for = "/*"
+  [headers.values]
+    Access-Control-Allow-Origin = "*"
+    Access-Control-Allow-Headers = "Content-Type, X-API-KEY, Authorization, X-Requested-With, Accept, Origin"
+    Access-Control-Allow-Methods = "GET, POST, OPTIONS, PUT, DELETE"
+
+[[headers]]
+  for = "/.netlify/functions/*"
+  [headers.values]
+    Access-Control-Allow-Origin = "*"
+    Access-Control-Allow-Headers = "Content-Type, X-API-KEY, Authorization, X-Requested-With, Accept, Origin"
+    Access-Control-Allow-Methods = "GET, POST, OPTIONS, PUT, DELETE"
+
+[[headers]]
+  for = "/api/*"
+  [headers.values]
+    Access-Control-Allow-Origin = "*"
+    Access-Control-Allow-Headers = "Content-Type, X-API-KEY, Authorization, X-Requested-With, Accept, Origin"
+    Access-Control-Allow-Methods = "GET, POST, OPTIONS, PUT, DELETE"
+
+# Redirecionamentos para Netlify Functions
+[[redirects]]
+  from = "/api/create-pix"
+  to = "/.netlify/functions/create-pix"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/api/check-status"
+  to = "/.netlify/functions/check-status"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/api/create-pix.js"
+  to = "/.netlify/functions/create-pix"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/api/check-status.js"
+  to = "/.netlify/functions/check-status"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/37626323423/api/create-pix"
+  to = "/.netlify/functions/create-pix"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/37626323423/api/check-status"
+  to = "/.netlify/functions/check-status"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/37626323423/.netlify/functions/create-pix"
+  to = "/.netlify/functions/create-pix"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/37626323423/.netlify/functions/check-status"
+  to = "/.netlify/functions/check-status"
+  status = 200
+  force = true

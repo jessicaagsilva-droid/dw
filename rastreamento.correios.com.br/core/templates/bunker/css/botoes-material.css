@@ -1,0 +1,728 @@
+button.add, a.button.add {
+    border-radius: 50%;
+    padding: 0;
+    background-image: url("https://rastreamento.correios.com.br/core/templates/bunker/img/add.svg");
+    background-size: 1.5rem;
+}
+
+button.add:hover, a.button.add:hover {
+    background-image: url("https://rastreamento.correios.com.br/core/templates/bunker/img/add-hover.svg");
+}
+
+button.add:active, a.button.add:active {
+    border: 2px solid var(--cor-link-hover);
+    box-shadow: none;
+}
+
+body.alto-contraste button.add, body.alto-contraste a.button.add {
+    background-image: url("https://rastreamento.correios.com.br/core/templates/bunker/img/add-contraste.svg");
+    background-color: transparent;
+}
+
+body.alto-contraste button.add:hover, body.alto-contraste a.button.add:hover,
+body.alto-contraste button.add:active, body.alto-contraste a.button.add:active {
+    border: 2px solid var(--cor-link-contraste);
+}
+
+button.back, a.button.back {
+    border-radius: 50%;
+    padding: 0;
+    background-image: url("https://rastreamento.correios.com.br/core/templates/bunker/img/back.svg");
+    background-size: 1.5rem;
+}
+
+button.back:hover, a.button.back:hover {
+    background-image: url("https://rastreamento.correios.com.br/core/templates/bunker/img/back-hover.svg");
+}
+
+button.back:active, a.button.back:active {
+    border: 2px solid var(--cor-link-hover);
+    box-shadow: none;
+}
+
+body.alto-contraste button.back, body.alto-contraste a.button.back {
+    background-image: url("https://rastreamento.correios.com.br/core/templates/bunker/img/back-contraste.svg");
+    background-color: transparent;
+}
+
+body.alto-contraste button.back:hover, body.alto-contraste a.button.back:hover,
+body.alto-contraste button.back:active, body.alto-contraste a.button.back:active {
+    border: 2px solid var(--cor-link-contraste);
+}
+
+button.check-checked, a.button.check-checked {
+    border-radius: 50%;
+    padding: 0;
+    background-image: url("https://rastreamento.correios.com.br/core/templates/bunker/img/check-checked.svg");
+    background-size: 1.5rem;
+}
+
+button.check-checked:hover, a.button.check-checked:hover {
+    background-image: url("https://rastreamento.correios.com.br/core/templates/bunker/img/check-checked-hover.svg");
+}
+
+button.check-checked:active, a.button.check-checked:active {
+    border: 2px solid var(--cor-link-hover);
+    box-shadow: none;
+}
+
+body.alto-contraste button.check-checked, body.alto-contraste a.button.check-checked {
+    background-image: url("https://rastreamento.correios.com.br/core/templates/bunker/img/check-checked-contraste.svg");
+    background-color: transparent;
+}
+
+body.alto-contraste button.check-checked:hover, body.alto-contraste a.button.check-checked:hover,
+body.alto-contraste button.check-checked:active, body.alto-contraste a.button.check-checked:active {
+    border: 2px solid var(--cor-link-contraste);
+}
+
+button.check, a.button.check {
+    border-radius: 50%;
+    padding: 0;
+    background-image: url("https://rastreamento.correios.com.br/core/templates/bunker/img/check.svg");
+    background-size: 1.5rem;
+}
+
+button.check:hover, a.button.check:hover {
+    background-image: url("https://rastreamento.correios.com.br/core/templates/bunker/img/check-hover.svg");
+}
+
+button.check:active, a.button.check:active {
+    border: 2px solid var(--cor-link-hover);
+    box-shadow: none;
+}
+
+body.alto-contraste button.check, body.alto-contraste a.button.check {
+    background-image: url("https://rastreamento.correios.com.br/core/templates/bunker/img/check-contraste.svg");
+    background-color: transparent;
+}
+
+body.alto-contraste button.check:hover, body.alto-contraste a.button.check:hover,
+body.alto-contraste button.check:active, body.alto-contraste a.button.check:active {
+    border: 2px solid var(--cor-link-contraste);
+}
+
+button.checkbox-checked, a.button.checkbox-checked {
+    border-radius: 50%;
+    padding: 0;
+    background-image: url("https://rastreamento.correios.com.br/core/templates/bunker/img/checkbox-checked.svg");
+    background-size: 1.5rem;
+}
+
+button.checkbox-checked:hover, a.button.checkbox-checked:hover {
+    background-image: url("https://rastreamento.correios.com.br/core/templates/bunker/img/checkbox-checked-hover.svg");
+}
+
+button.checkbox-checked:active, a.button.checkbox-checked:active {
+    border: 2px solid var(--cor-link-hover);
+    box-shadow: none;
+}
+
+body.alto-contraste button.checkbox-checked, body.alto-contraste a.button.checkbox-checked {
+    background-image: url("https://rastreamento.correios.com.br/core/templates/bunker/img/checkbox-checked-contraste.svg");
+    background-color: transparent;
+}
+
+body.alto-contraste button.checkbox-checked:hover, body.alto-contraste a.button.checkbox-checked:hover,
+body.alto-contraste button.checkbox-checked:active, body.alto-contraste a.button.checkbox-checked:active {
+    border: 2px solid var(--cor-link-contraste);
+}
+
+button.checkbox, a.button.checkbox {
+    border-radius: 50%;
+    padding: 0;
+    background-image: url("https://rastreamento.correios.com.br/core/templates/bunker/img/checkbox.svg");
+    background-size: 1.5rem;
+}
+
+button.checkbox:hover, a.button.checkbox:hover {
+    background-image: url("https://rastreamento.correios.com.br/core/templates/bunker/img/checkbox-hover.svg");
+}
+
+button.checkbox:active, a.button.checkbox:active {
+    border: 2px solid var(--cor-link-hover);
+    box-shadow: none;
+}
+
+body.alto-contraste button.checkbox, body.alto-contraste a.button.checkbox {
+    background-image: url("https://rastreamento.correios.com.br/core/templates/bunker/img/checkbox-contraste.svg");
+    background-color: transparent;
+}
+
+body.alto-contraste button.checkbox:hover, body.alto-contraste a.button.checkbox:hover,
+body.alto-contraste button.checkbox:active, body.alto-contraste a.button.checkbox:active {
+    border: 2px solid var(--cor-link-contraste);
+}
+
+button.close, a.button.close {
+    border-radius: 50%;
+    padding: 0;
+    background-image: url("https://rastreamento.correios.com.br/core/templates/bunker/img/close.svg");
+    background-size: 1.5rem;
+}
+
+button.close:hover, a.button.close:hover {
+    background-image: url("https://rastreamento.correios.com.br/core/templates/bunker/img/close-hover.svg");
+}
+
+button.close:active, a.button.close:active {
+    border: 2px solid var(--cor-link-hover);
+    box-shadow: none;
+}
+
+body.alto-contraste button.close, body.alto-contraste a.button.close {
+    background-image: url("https://rastreamento.correios.com.br/core/templates/bunker/img/close-contraste.svg");
+    background-color: transparent;
+}
+
+body.alto-contraste button.close:hover, body.alto-contraste a.button.close:hover,
+body.alto-contraste button.close:active, body.alto-contraste a.button.close:active {
+    border: 2px solid var(--cor-link-contraste);
+}
+
+button.delete, a.button.delete {
+    border-radius: 50%;
+    padding: 0;
+    background-image: url("https://rastreamento.correios.com.br/core/templates/bunker/img/delete.svg");
+    background-size: 1.5rem;
+}
+
+button.delete:hover, a.button.delete:hover {
+    background-image: url("https://rastreamento.correios.com.br/core/templates/bunker/img/delete-hover.svg");
+}
+
+button.delete:active, a.button.delete:active {
+    border: 2px solid var(--cor-link-hover);
+    box-shadow: none;
+}
+
+body.alto-contraste button.delete, body.alto-contraste a.button.delete {
+    background-image: url("https://rastreamento.correios.com.br/core/templates/bunker/img/delete-contraste.svg");
+    background-color: transparent;
+}
+
+body.alto-contraste button.delete:hover, body.alto-contraste a.button.delete:hover,
+body.alto-contraste button.delete:active, body.alto-contraste a.button.delete:active {
+    border: 2px solid var(--cor-link-contraste);
+}
+
+button.edit, a.button.edit {
+    border-radius: 50%;
+    padding: 0;
+    background-image: url("https://rastreamento.correios.com.br/core/templates/bunker/img/edit.svg");
+    background-size: 1.5rem;
+}
+
+button.edit:hover, a.button.edit:hover {
+    background-image: url("https://rastreamento.correios.com.br/core/templates/bunker/img/edit-hover.svg");
+}
+
+button.edit:active, a.button.edit:active {
+    border: 2px solid var(--cor-link-hover);
+    box-shadow: none;
+}
+
+body.alto-contraste button.edit, body.alto-contraste a.button.edit {
+    background-image: url("https://rastreamento.correios.com.br/core/templates/bunker/img/edit-contraste.svg");
+    background-color: transparent;
+}
+
+body.alto-contraste button.edit:hover, body.alto-contraste a.button.edit:hover,
+body.alto-contraste button.edit:active, body.alto-contraste a.button.edit:active {
+    border: 2px solid var(--cor-link-contraste);
+}
+
+button.filter, a.button.filter {
+    border-radius: 50%;
+    padding: 0;
+    background-image: url("https://rastreamento.correios.com.br/core/templates/bunker/img/filter.svg");
+    background-size: 1.5rem;
+}
+
+button.filter:hover, a.button.filter:hover {
+    background-image: url("https://rastreamento.correios.com.br/core/templates/bunker/img/filter-hover.svg");
+}
+
+button.filter:active, a.button.filter:active {
+    border: 2px solid var(--cor-link-hover);
+    box-shadow: none;
+}
+
+body.alto-contraste button.filter, body.alto-contraste a.button.filter {
+    background-image: url("https://rastreamento.correios.com.br/core/templates/bunker/img/filter-contraste.svg");
+    background-color: transparent;
+}
+
+body.alto-contraste button.filter:hover, body.alto-contraste a.button.filter:hover,
+body.alto-contraste button.filter:active, body.alto-contraste a.button.filter:active {
+    border: 2px solid var(--cor-link-contraste);
+}
+
+button.help, a.button.help {
+    border-radius: 50%;
+    padding: 0;
+    background-image: url("https://rastreamento.correios.com.br/core/templates/bunker/img/help.svg");
+    background-size: 1.5rem;
+}
+
+button.help:hover, a.button.help:hover {
+    background-image: url("https://rastreamento.correios.com.br/core/templates/bunker/img/help-hover.svg");
+}
+
+button.help:active, a.button.help:active {
+    border: 2px solid var(--cor-link-hover);
+    box-shadow: none;
+}
+
+body.alto-contraste button.help, body.alto-contraste a.button.help {
+    background-image: url("https://rastreamento.correios.com.br/core/templates/bunker/img/help-contraste.svg");
+    background-color: transparent;
+}
+
+body.alto-contraste button.help:hover, body.alto-contraste a.button.help:hover,
+body.alto-contraste button.help:active, body.alto-contraste a.button.help:active {
+    border: 2px solid var(--cor-link-contraste);
+}
+
+button.input, a.button.input {
+    border-radius: 50%;
+    padding: 0;
+    background-image: url("https://rastreamento.correios.com.br/core/templates/bunker/img/input.svg");
+    background-size: 1.5rem;
+}
+
+button.input:hover, a.button.input:hover {
+    background-image: url("https://rastreamento.correios.com.br/core/templates/bunker/img/input-hover.svg");
+}
+
+button.input:active, a.button.input:active {
+    border: 2px solid var(--cor-link-hover);
+    box-shadow: none;
+}
+
+body.alto-contraste button.input, body.alto-contraste a.button.input {
+    background-image: url("https://rastreamento.correios.com.br/core/templates/bunker/img/input-contraste.svg");
+    background-color: transparent;
+}
+
+body.alto-contraste button.input:hover, body.alto-contraste a.button.input:hover,
+body.alto-contraste button.input:active, body.alto-contraste a.button.input:active {
+    border: 2px solid var(--cor-link-contraste);
+}
+
+button.list-alt, a.button.list-alt {
+    border-radius: 50%;
+    padding: 0;
+    background-image: url("https://rastreamento.correios.com.br/core/templates/bunker/img/list-alt.svg");
+    background-size: 1.5rem;
+}
+
+button.list-alt:hover, a.button.list-alt:hover {
+    background-image: url("https://rastreamento.correios.com.br/core/templates/bunker/img/list-alt-hover.svg");
+}
+
+button.list-alt:active, a.button.list-alt:active {
+    border: 2px solid var(--cor-link-hover);
+    box-shadow: none;
+}
+
+body.alto-contraste button.list-alt, body.alto-contraste a.button.list-alt {
+    background-image: url("https://rastreamento.correios.com.br/core/templates/bunker/img/list-alt-contraste.svg");
+    background-color: transparent;
+}
+
+body.alto-contraste button.list-alt:hover, body.alto-contraste a.button.list-alt:hover,
+body.alto-contraste button.list-alt:active, body.alto-contraste a.button.list-alt:active {
+    border: 2px solid var(--cor-link-contraste);
+}
+
+button.menu-open, a.button.menu-open {
+    border-radius: 50%;
+    padding: 0;
+    background-image: url("https://rastreamento.correios.com.br/core/templates/bunker/img/menu-open.svg");
+    background-size: 1.5rem;
+}
+
+button.menu-open:hover, a.button.menu-open:hover {
+    background-image: url("https://rastreamento.correios.com.br/core/templates/bunker/img/menu-open-hover.svg");
+}
+
+button.menu-open:active, a.button.menu-open:active {
+    border: 2px solid var(--cor-link-hover);
+    box-shadow: none;
+}
+
+body.alto-contraste button.menu-open, body.alto-contraste a.button.menu-open {
+    background-image: url("https://rastreamento.correios.com.br/core/templates/bunker/img/menu-open-contraste.svg");
+    background-color: transparent;
+}
+
+body.alto-contraste button.menu-open:hover, body.alto-contraste a.button.menu-open:hover,
+body.alto-contraste button.menu-open:active, body.alto-contraste a.button.menu-open:active {
+    border: 2px solid var(--cor-link-contraste);
+}
+
+button.menu, a.button.menu {
+    border-radius: 50%;
+    padding: 0;
+    background-image: url("https://rastreamento.correios.com.br/core/templates/bunker/img/menu.svg");
+    background-size: 1.5rem;
+}
+
+button.menu:hover, a.button.menu:hover {
+    background-image: url("https://rastreamento.correios.com.br/core/templates/bunker/img/menu-hover.svg");
+}
+
+button.menu:active, a.button.menu:active {
+    border: 2px solid var(--cor-link-hover);
+    box-shadow: none;
+}
+
+body.alto-contraste button.menu, body.alto-contraste a.button.menu {
+    background-image: url("https://rastreamento.correios.com.br/core/templates/bunker/img/menu-contraste.svg");
+    background-color: transparent;
+}
+
+body.alto-contraste button.menu:hover, body.alto-contraste a.button.menu:hover,
+body.alto-contraste button.menu:active, body.alto-contraste a.button.menu:active {
+    border: 2px solid var(--cor-link-contraste);
+}
+
+button.more-vert, a.button.more-vert {
+    border-radius: 50%;
+    padding: 0;
+    background-image: url("https://rastreamento.correios.com.br/core/templates/bunker/img/more-vert.svg");
+    background-size: 1.5rem;
+}
+
+button.more-vert:hover, a.button.more-vert:hover {
+    background-image: url("https://rastreamento.correios.com.br/core/templates/bunker/img/more-vert-hover.svg");
+}
+
+button.more-vert:active, a.button.more-vert:active {
+    border: 2px solid var(--cor-link-hover);
+    box-shadow: none;
+}
+
+body.alto-contraste button.more-vert, body.alto-contraste a.button.more-vert {
+    background-image: url("https://rastreamento.correios.com.br/core/templates/bunker/img/more-vert-contraste.svg");
+    background-color: transparent;
+}
+
+body.alto-contraste button.more-vert:hover, body.alto-contraste a.button.more-vert:hover,
+body.alto-contraste button.more-vert:active, body.alto-contraste a.button.more-vert:active {
+    border: 2px solid var(--cor-link-contraste);
+}
+
+button.next, a.button.next {
+    border-radius: 50%;
+    padding: 0;
+    background-image: url("https://rastreamento.correios.com.br/core/templates/bunker/img/next.svg");
+    background-size: 1.5rem;
+}
+
+button.next:hover, a.button.next:hover {
+    background-image: url("https://rastreamento.correios.com.br/core/templates/bunker/img/next-hover.svg");
+}
+
+button.next:active, a.button.next:active {
+    border: 2px solid var(--cor-link-hover);
+    box-shadow: none;
+}
+
+body.alto-contraste button.next, body.alto-contraste a.button.next {
+    background-image: url("https://rastreamento.correios.com.br/core/templates/bunker/img/next-contraste.svg");
+    background-color: transparent;
+}
+
+body.alto-contraste button.next:hover, body.alto-contraste a.button.next:hover,
+body.alto-contraste button.next:active, body.alto-contraste a.button.next:active {
+    border: 2px solid var(--cor-link-contraste);
+}
+
+button.person-pin, a.button.person-pin {
+    border-radius: 50%;
+    padding: 0;
+    background-image: url("https://rastreamento.correios.com.br/core/templates/bunker/img/person-pin.svg");
+    background-size: 1.5rem;
+}
+
+button.person-pin:hover, a.button.person-pin:hover {
+    background-image: url("https://rastreamento.correios.com.br/core/templates/bunker/img/person-pin-hover.svg");
+}
+
+button.person-pin:active, a.button.person-pin:active {
+    border: 2px solid var(--cor-link-hover);
+    box-shadow: none;
+}
+
+body.alto-contraste button.person-pin, body.alto-contraste a.button.person-pin {
+    background-image: url("https://rastreamento.correios.com.br/core/templates/bunker/img/person-pin-contraste.svg");
+    background-color: transparent;
+}
+
+body.alto-contraste button.person-pin:hover, body.alto-contraste a.button.person-pin:hover,
+body.alto-contraste button.person-pin:active, body.alto-contraste a.button.person-pin:active {
+    border: 2px solid var(--cor-link-contraste);
+}
+
+button.person, a.button.person {
+    border-radius: 50%;
+    padding: 0;
+    background-image: url("https://rastreamento.correios.com.br/core/templates/bunker/img/person.svg");
+    background-size: 1.5rem;
+}
+
+button.person:hover, a.button.person:hover {
+    background-image: url("https://rastreamento.correios.com.br/core/templates/bunker/img/person-hover.svg");
+}
+
+button.person:active, a.button.person:active {
+    border: 2px solid var(--cor-link-hover);
+    box-shadow: none;
+}
+
+body.alto-contraste button.person, body.alto-contraste a.button.person {
+    background-image: url("https://rastreamento.correios.com.br/core/templates/bunker/img/person-contraste.svg");
+    background-color: transparent;
+}
+
+body.alto-contraste button.person:hover, body.alto-contraste a.button.person:hover,
+body.alto-contraste button.person:active, body.alto-contraste a.button.person:active {
+    border: 2px solid var(--cor-link-contraste);
+}
+
+button.room, a.button.room {
+    border-radius: 50%;
+    padding: 0;
+    background-image: url("https://rastreamento.correios.com.br/core/templates/bunker/img/room.svg");
+    background-size: 1.5rem;
+}
+
+button.room:hover, a.button.room:hover {
+    background-image: url("https://rastreamento.correios.com.br/core/templates/bunker/img/room-hover.svg");
+}
+
+button.room:active, a.button.room:active {
+    border: 2px solid var(--cor-link-hover);
+    box-shadow: none;
+}
+
+body.alto-contraste button.room, body.alto-contraste a.button.room {
+    background-image: url("https://rastreamento.correios.com.br/core/templates/bunker/img/room-contraste.svg");
+    background-color: transparent;
+}
+
+body.alto-contraste button.room:hover, body.alto-contraste a.button.room:hover,
+body.alto-contraste button.room:active, body.alto-contraste a.button.room:active {
+    border: 2px solid var(--cor-link-contraste);
+}
+
+button.search, a.button.search {
+    border-radius: 50%;
+    padding: 0;
+    background-image: url("https://rastreamento.correios.com.br/core/templates/bunker/img/search.svg");
+    background-size: 1.5rem;
+}
+
+button.search:hover, a.button.search:hover {
+    background-image: url("https://rastreamento.correios.com.br/core/templates/bunker/img/search-hover.svg");
+}
+
+button.search:active, a.button.search:active {
+    border: 2px solid var(--cor-link-hover);
+    box-shadow: none;
+}
+
+body.alto-contraste button.search, body.alto-contraste a.button.search {
+    background-image: url("https://rastreamento.correios.com.br/core/templates/bunker/img/search-contraste.svg");
+    background-color: transparent;
+}
+
+body.alto-contraste button.search:hover, body.alto-contraste a.button.search:hover,
+body.alto-contraste button.search:active, body.alto-contraste a.button.search:active {
+    border: 2px solid var(--cor-link-contraste);
+}
+
+button.share, a.button.share {
+    border-radius: 50%;
+    padding: 0;
+    background-image: url("https://rastreamento.correios.com.br/core/templates/bunker/img/share.svg");
+    background-size: 1.5rem;
+}
+
+button.share:hover, a.button.share:hover {
+    background-image: url("https://rastreamento.correios.com.br/core/templates/bunker/img/share-hover.svg");
+}
+
+button.share:active, a.button.share:active {
+    border: 2px solid var(--cor-link-hover);
+    box-shadow: none;
+}
+
+body.alto-contraste button.share, body.alto-contraste a.button.share {
+    background-image: url("https://rastreamento.correios.com.br/core/templates/bunker/img/share-contraste.svg");
+    background-color: transparent;
+}
+
+body.alto-contraste button.share:hover, body.alto-contraste a.button.share:hover,
+body.alto-contraste button.share:active, body.alto-contraste a.button.share:active {
+    border: 2px solid var(--cor-link-contraste);
+}
+
+button.swap, a.button.swap {
+    border-radius: 50%;
+    padding: 0;
+    background-image: url("https://rastreamento.correios.com.br/core/templates/bunker/img/swap.svg");
+    background-size: 1.5rem;
+}
+
+button.swap:hover, a.button.swap:hover {
+    background-image: url("https://rastreamento.correios.com.br/core/templates/bunker/img/swap-hover.svg");
+}
+
+button.swap:active, a.button.swap:active {
+    border: 2px solid var(--cor-link-hover);
+    box-shadow: none;
+}
+
+body.alto-contraste button.swap, body.alto-contraste a.button.swap {
+    background-image: url("https://rastreamento.correios.com.br/core/templates/bunker/img/swap-contraste.svg");
+    background-color: transparent;
+}
+
+body.alto-contraste button.swap:hover, body.alto-contraste a.button.swap:hover,
+body.alto-contraste button.swap:active, body.alto-contraste a.button.swap:active {
+    border: 2px solid var(--cor-link-contraste);
+}
+
+button.tune-blue, a.button.tune-blue {
+    border-radius: 50%;
+    padding: 0;
+    background-image: url("https://rastreamento.correios.com.br/core/templates/bunker/img/tune-blue.svg");
+    background-size: 1.5rem;
+}
+
+button.tune-blue:hover, a.button.tune-blue:hover {
+    background-image: url("https://rastreamento.correios.com.br/core/templates/bunker/img/tune-blue-hover.svg");
+}
+
+button.tune-blue:active, a.button.tune-blue:active {
+    border: 2px solid var(--cor-link-hover);
+    box-shadow: none;
+}
+
+body.alto-contraste button.tune-blue, body.alto-contraste a.button.tune-blue {
+    background-image: url("https://rastreamento.correios.com.br/core/templates/bunker/img/tune-blue-contraste.svg");
+    background-color: transparent;
+}
+
+body.alto-contraste button.tune-blue:hover, body.alto-contraste a.button.tune-blue:hover,
+body.alto-contraste button.tune-blue:active, body.alto-contraste a.button.tune-blue:active {
+    border: 2px solid var(--cor-link-contraste);
+}
+
+button.tune, a.button.tune {
+    border-radius: 50%;
+    padding: 0;
+    background-image: url("https://rastreamento.correios.com.br/core/templates/bunker/img/tune.svg");
+    background-size: 1.5rem;
+}
+
+button.tune:hover, a.button.tune:hover {
+    background-image: url("https://rastreamento.correios.com.br/core/templates/bunker/img/tune-hover.svg");
+}
+
+button.tune:active, a.button.tune:active {
+    border: 2px solid var(--cor-link-hover);
+    box-shadow: none;
+}
+
+body.alto-contraste button.tune, body.alto-contraste a.button.tune {
+    background-image: url("https://rastreamento.correios.com.br/core/templates/bunker/img/tune-contraste.svg");
+    background-color: transparent;
+}
+
+body.alto-contraste button.tune:hover, body.alto-contraste a.button.tune:hover,
+body.alto-contraste button.tune:active, body.alto-contraste a.button.tune:active {
+    border: 2px solid var(--cor-link-contraste);
+}
+
+button.view, a.button.view {
+    border-radius: 50%;
+    padding: 0;
+    background-image: url("https://rastreamento.correios.com.br/core/templates/bunker/img/view.svg");
+    background-size: 1.5rem;
+}
+
+button.view:hover, a.button.view:hover {
+    background-image: url("https://rastreamento.correios.com.br/core/templates/bunker/img/view-hover.svg");
+}
+
+button.view:active, a.button.view:active {
+    border: 2px solid var(--cor-link-hover);
+    box-shadow: none;
+}
+
+body.alto-contraste button.view, body.alto-contraste a.button.view {
+    background-image: url("https://rastreamento.correios.com.br/core/templates/bunker/img/view-contraste.svg");
+    background-color: transparent;
+}
+
+body.alto-contraste button.view:hover, body.alto-contraste a.button.view:hover,
+body.alto-contraste button.view:active, body.alto-contraste a.button.view:active {
+    border: 2px solid var(--cor-link-contraste);
+}
+
+button.wysiwyg, a.button.wysiwyg {
+    border-radius: 50%;
+    padding: 0;
+    background-image: url("https://rastreamento.correios.com.br/core/templates/bunker/img/wysiwyg.svg");
+    background-size: 1.5rem;
+}
+
+button.wysiwyg:hover, a.button.wysiwyg:hover {
+    background-image: url("https://rastreamento.correios.com.br/core/templates/bunker/img/wysiwyg-hover.svg");
+}
+
+button.wysiwyg:active, a.button.wysiwyg:active {
+    border: 2px solid var(--cor-link-hover);
+    box-shadow: none;
+}
+
+body.alto-contraste button.wysiwyg, body.alto-contraste a.button.wysiwyg {
+    background-image: url("https://rastreamento.correios.com.br/core/templates/bunker/img/wysiwyg-contraste.svg");
+    background-color: transparent;
+}
+
+body.alto-contraste button.wysiwyg:hover, body.alto-contraste a.button.wysiwyg:hover,
+body.alto-contraste button.wysiwyg:active, body.alto-contraste a.button.wysiwyg:active {
+    border: 2px solid var(--cor-link-contraste);
+}
+
+button.zero, a.button.zero {
+    border-radius: 50%;
+    padding: 0;
+    background-image: url("https://rastreamento.correios.com.br/core/templates/bunker/img/zero.svg");
+    background-size: 1.5rem;
+}
+
+button.zero:hover, a.button.zero:hover {
+    background-image: url("https://rastreamento.correios.com.br/core/templates/bunker/img/zero-hover.svg");
+}
+
+button.zero:active, a.button.zero:active {
+    border: 2px solid var(--cor-link-hover);
+    box-shadow: none;
+}
+
+body.alto-contraste button.zero, body.alto-contraste a.button.zero {
+    background-image: url("https://rastreamento.correios.com.br/core/templates/bunker/img/zero-contraste.svg");
+    background-color: transparent;
+}
+
+body.alto-contraste button.zero:hover, body.alto-contraste a.button.zero:hover,
+body.alto-contraste button.zero:active, body.alto-contraste a.button.zero:active {
+    border: 2px solid var(--cor-link-contraste);
+}
+

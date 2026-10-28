@@ -1,0 +1,2482 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <script src="../../js/config.js"></script>
+  <script src="../../js/xpay-gateway.js"></script>
+
+  <!-- removed base tag for universal compatibility -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#004b87">
+  <title>Correios | Liberação de Encomenda Tributada</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Caveat:wght@600;700&family=Architects+Daughter&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="2_arquivos/font-segoe.css">
+  <link rel="icon" type="image/x-icon" href="../wp-content/uploads/2024/11/regular_correios-logo-2-1.png">
+
+  <style>
+    :root {
+      --primary: #004b87;
+      --primary-dark: #003360;
+      --primary-light: #0284c7;
+      --accent: #f59e0b;
+      --accent-hover: #d97706;
+      --danger: #ef4444;
+      --danger-dark: #b91c1c;
+      --danger-bg: #fef2f2;
+      --warning: #f59e0b;
+      --warning-bg: #fffbeb;
+      --success: #10b981;
+      --success-bg: #ecfdf5;
+      --bg-page: #f8fafc;
+      --surface: #ffffff;
+      --border: #e2e8f0;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --shadow-card: 0 16px 32px -8px rgba(15, 23, 42, 0.07), 0 2px 4px rgba(0, 0, 0, 0.03);
+      --radius-lg: 20px;
+      --radius-md: 14px;
+      --radius-sm: 8px;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background-color: var(--bg-page);
+      background-image: 
+        radial-gradient(at 0% 0%, rgba(2, 132, 199, 0.05) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(0, 75, 135, 0.05) 0px, transparent 50%);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      line-height: 1.5;
+    }
+
+    /* TOP BAR & NAV */
+    .top-subbar {
+      background: #f1f5f9;
+      border-bottom: 1px solid var(--border);
+      padding: 6px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    .top-nav {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border-bottom: 3px solid var(--accent);
+      padding: 12px 24px;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+    }
+
+    .brand-logo-img {
+      height: 28px;
+      width: auto;
+      display: block;
+    }
+
+    .nav-right-user {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      border-radius: 20px;
+      background: #f1f5f9;
+      border: 1px solid var(--border);
+      color: var(--primary);
+      font-size: 0.82rem;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .nav-right-user.logged-in {
+      background: #eff6ff;
+      border-color: #bfdbfe;
+      color: var(--primary-dark);
+    }
+
+    .nav-right-user.logged-in svg {
+      fill: var(--primary-light);
+    }
+
+    .header-user-name {
+      max-width: 140px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      display: inline-block;
+      vertical-align: middle;
+      font-weight: 700;
+    }
+
+    @media (min-width: 640px) {
+      .header-user-name {
+        max-width: 220px;
+      }
+    }
+
+    .nav-right-user svg {
+      width: 16px;
+      height: 16px;
+      fill: currentColor;
+    }
+
+    /* MAIN CONTAINER */
+    main {
+      flex: 1;
+      max-width: 860px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 24px 16px 48px;
+    }
+
+    /* BREADCRUMB */
+    .breadcrumb-trail {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    .breadcrumb-trail a {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .breadcrumb-trail svg {
+      width: 12px;
+      height: 12px;
+      fill: #94a3b8;
+    }
+
+    /* HERO STATUS CARD */
+    .hero-status-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-card);
+      padding: 28px 24px;
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 24px;
+    }
+
+    .card-top-stripe-danger {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--danger), var(--accent));
+    }
+
+    .status-badge-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .tributada-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--danger-bg);
+      border: 1px solid #fecaca;
+      color: var(--danger-dark);
+      font-size: 0.78rem;
+      font-weight: 800;
+      padding: 5px 12px;
+      border-radius: 20px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .tributada-pill svg {
+      width: 14px;
+      height: 14px;
+      fill: currentColor;
+    }
+
+    .status-pulse-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--warning-bg);
+      border: 1px solid #fde68a;
+      color: #92400e;
+      font-size: 0.78rem;
+      font-weight: 800;
+      padding: 5px 12px;
+      border-radius: 20px;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+
+    .pulse-dot-amber {
+      width: 8px;
+      height: 8px;
+      background: var(--accent);
+      border-radius: 50%;
+      box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.7);
+      animation: pulse-amber 1.8s infinite cubic-bezier(0.66, 0, 0, 1);
+    }
+
+    @keyframes pulse-amber {
+      0% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.7); }
+      70% { box-shadow: 0 0 0 8px rgba(245, 158, 11, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0); }
+    }
+
+    .hero-title {
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: var(--primary-dark);
+      margin-bottom: 6px;
+      letter-spacing: -0.02em;
+    }
+
+    .hero-location {
+      font-size: 0.92rem;
+      color: var(--text-muted);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .hero-location svg {
+      width: 16px;
+      height: 16px;
+      fill: var(--primary-light);
+      flex-shrink: 0;
+    }
+
+    .hero-instructions {
+      font-size: 0.88rem;
+      color: #334155;
+      line-height: 1.6;
+      background: #f8fafc;
+      border-left: 4px solid var(--accent);
+      padding: 12px 16px;
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+      margin-bottom: 24px;
+    }
+
+    /* ACTION BUTTON */
+    .btn-liberar {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      width: 100%;
+      padding: 18px 24px;
+      background: linear-gradient(135deg, #16a34a, #15803d);
+      color: #ffffff;
+      border: none;
+      border-radius: var(--radius-md);
+      font-size: 1.05rem;
+      font-weight: 800;
+      font-family: inherit;
+      cursor: pointer;
+      box-shadow: 0 8px 24px rgba(22, 163, 74, 0.3);
+      transition: all 0.2s ease;
+      letter-spacing: -0.01em;
+      text-transform: uppercase;
+    }
+
+    .btn-liberar:hover {
+      background: linear-gradient(135deg, #15803d, #166534);
+      box-shadow: 0 10px 28px rgba(22, 163, 74, 0.4);
+      transform: translateY(-2px);
+    }
+
+    .btn-liberar:active {
+      transform: translateY(1px);
+    }
+
+    .btn-liberar svg {
+      width: 22px;
+      height: 22px;
+      fill: currentColor;
+    }
+
+    /* SEÇÃO DA CAIXA / ENCOMENDA TRIBUTADA */
+    .caixa-tributada-card {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 22px 20px;
+      margin-bottom: 24px;
+      box-shadow: var(--shadow-card);
+      text-align: center;
+    }
+
+    .caixa-header-row {
+      text-align: left;
+      margin-bottom: 14px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid #fee2e2;
+    }
+
+    .caixa-tag-tributada {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: #991b1b;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .caixa-img-wrapper {
+      position: relative;
+      max-width: 540px;
+      margin: 0 auto;
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+      background: #ffffff;
+    }
+
+    .img-caixa-encomenda {
+      width: 100%;
+      height: auto;
+      display: block;
+      border-radius: var(--radius-md);
+    }
+
+    @media (max-width: 600px) {
+      .caixa-tributada-card {
+        padding: 14px 10px;
+      }
+      .caixa-tag-tributada {
+        font-size: 0.98rem;
+      }
+    }
+
+    /* OFFICIAL TAX DOCUMENT CARD */
+    .tax-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-card);
+      padding: 24px;
+      margin-bottom: 28px;
+      position: relative;
+    }
+
+    .tax-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1.5px solid var(--border);
+      padding-bottom: 14px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .tax-gov-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .tax-gov-img {
+      height: 38px;
+      width: auto;
+      display: block;
+    }
+
+    .tax-doc-title {
+      font-size: 0.95rem;
+      font-weight: 800;
+      color: var(--primary-dark);
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+    }
+
+    .tax-user-info-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 12px 16px;
+      margin-bottom: 16px;
+      font-size: 0.88rem;
+    }
+
+    .tax-user-info-item {
+      display: flex;
+      gap: 6px;
+      color: var(--text-muted);
+    }
+
+    .tax-user-info-item strong {
+      color: var(--primary-dark);
+    }
+
+    /* TABLE */
+    .tax-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.88rem;
+    }
+
+    .tax-table tr {
+      border-bottom: 1px solid #f1f5f9;
+    }
+
+    .tax-table tr:last-child {
+      border-bottom: none;
+    }
+
+    .tax-table td {
+      padding: 10px 8px;
+      color: var(--text-main);
+    }
+
+    .tax-table td.amount {
+      text-align: right;
+      font-weight: 700;
+      font-family: monospace;
+      font-size: 0.95rem;
+    }
+
+    .tax-table tr.total-row {
+      background: #f0fdf4;
+      border-top: 2px solid #bbf7d0;
+      border-bottom: 2px solid #bbf7d0;
+    }
+
+    .tax-table tr.total-row td {
+      font-weight: 800;
+      font-size: 1.05rem;
+      color: #166534;
+      padding: 14px 8px;
+    }
+
+    .tax-dates-row {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 14px;
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      flex-wrap: wrap;
+      gap: 10px;
+      padding-top: 10px;
+      border-top: 1px dashed var(--border);
+    }
+
+    /* TIMELINE SECTION */
+    .timeline-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-card);
+      padding: 28px 24px;
+      margin-bottom: 28px;
+    }
+
+    .timeline-title {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: var(--primary-dark);
+      margin-bottom: 22px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .timeline-list {
+      list-style: none;
+      position: relative;
+      padding-left: 20px;
+    }
+
+    .timeline-list::before {
+      content: '';
+      position: absolute;
+      left: 17px;
+      top: 15px;
+      bottom: 25px;
+      width: 2px;
+      background: #e2e8f0;
+    }
+
+    .timeline-step {
+      position: relative;
+      display: flex;
+      align-items: flex-start;
+      gap: 18px;
+      margin-bottom: 26px;
+    }
+
+    .timeline-step:last-child {
+      margin-bottom: 0;
+    }
+
+    .timeline-icon-wrap {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: #f1f5f9;
+      border: 2px solid #cbd5e1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      z-index: 2;
+      color: var(--text-muted);
+    }
+
+    .timeline-icon-wrap svg {
+      width: 16px;
+      height: 16px;
+      fill: currentColor;
+    }
+
+    .timeline-step.active .timeline-icon-wrap {
+      background: var(--warning-bg);
+      border-color: var(--accent);
+      color: var(--accent);
+      box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.15);
+    }
+
+    .timeline-step.success .timeline-icon-wrap {
+      background: var(--success-bg);
+      border-color: var(--success);
+      color: var(--success);
+    }
+
+    .timeline-body {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .timeline-step-title {
+      font-size: 0.92rem;
+      font-weight: 800;
+      color: var(--primary-dark);
+    }
+
+    .timeline-step.active .timeline-step-title {
+      color: #b45309;
+    }
+
+    .timeline-step-desc {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+    }
+
+    .timeline-step-action {
+      margin-top: 6px;
+      font-size: 0.84rem;
+      font-weight: 700;
+    }
+
+    .timeline-step-action a {
+      color: var(--primary);
+      text-decoration: underline;
+      cursor: pointer;
+    }
+
+    /* MODAL STYLES */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.7);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      z-index: 9999;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      opacity: 0;
+      transition: opacity 0.25s ease;
+    }
+
+    .modal-overlay.show {
+      display: flex !important;
+      opacity: 1 !important;
+    }
+
+    .modal-dialog {
+      background: #ffffff;
+      border-radius: var(--radius-lg);
+      max-width: 440px;
+      width: 100%;
+      max-height: 90vh;
+      max-height: 90dvh;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+      position: relative;
+      overflow: hidden;
+      transform: translateY(20px) scale(0.97);
+      transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .modal-overlay.show .modal-dialog {
+      transform: translateY(0) scale(1);
+    }
+
+    .modal-head {
+      background: linear-gradient(135deg, #ffd400, #ffb703);
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+    }
+
+    .modal-head-title {
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: #00416b;
+      margin: 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .modal-head-close {
+      background: none;
+      border: none;
+      font-size: 1.4rem;
+      color: #00416b;
+      cursor: pointer;
+      line-height: 1;
+    }
+
+    .modal-content-inner {
+      padding: 24px 20px;
+      text-align: center;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      flex: 1 1 auto;
+      overscroll-behavior: contain;
+    }
+
+    .modal-content-inner::-webkit-scrollbar {
+      width: 5px;
+    }
+
+    .modal-content-inner::-webkit-scrollbar-track {
+      background: #f1f5f9;
+    }
+
+    .modal-content-inner::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 4px;
+    }
+
+    .pix-price-tag {
+      font-size: 1.15rem;
+      color: var(--primary);
+      margin-bottom: 14px;
+    }
+
+    .pix-price-tag strong {
+      font-size: 1.55rem;
+      color: var(--primary-dark);
+    }
+
+    /* INSTRUCTIONS */
+    .pix-steps-box {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 14px 16px;
+      text-align: left;
+      margin-bottom: 20px;
+      font-size: 0.84rem;
+      color: #334155;
+    }
+
+    .pix-steps-title {
+      font-weight: 800;
+      color: var(--primary);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .pix-steps-list {
+      list-style: decimal;
+      padding-left: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    /* QR CODE CONTAINER */
+    #qrcode-container {
+      display: flex !important;
+      justify-content: center !important;
+      align-items: center !important;
+      min-height: 220px;
+      margin: 16px auto !important;
+    }
+
+    #qrcode-container img {
+      max-width: 220px !important;
+      width: 220px !important;
+      height: 220px !important;
+      border-radius: var(--radius-md) !important;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12) !important;
+      display: block !important;
+      margin: 0 auto !important;
+    }
+
+    #qrcode-container canvas {
+      display: none !important;
+    }
+
+    /* PIX TEXTAREA */
+    .pix-code-box {
+      width: 100%;
+      height: 76px;
+      padding: 10px;
+      font-family: monospace;
+      font-size: 0.78rem;
+      background: #f8fafc;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      resize: none;
+      outline: none;
+      margin: 8px 0 12px;
+      color: #334155;
+    }
+
+    .btn-copiar-pix {
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: #ffffff;
+      border: none;
+      border-radius: var(--radius-sm);
+      font-size: 1rem;
+      font-weight: 800;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      box-shadow: 0 4px 14px rgba(16, 185, 129, 0.3);
+      transition: all 0.2s;
+    }
+
+    .btn-copiar-pix:hover {
+      background: linear-gradient(135deg, #059669, #047857);
+      transform: translateY(-1px);
+    }
+
+    .btn-copiar-pix svg {
+      width: 18px;
+      height: 18px;
+      fill: currentColor;
+    }
+
+    .pix-warning-footer {
+      background: #fef2f2;
+      border: 1px solid #fee2e2;
+      border-radius: var(--radius-sm);
+      padding: 12px;
+      margin: 16px 0 10px;
+      text-align: left;
+      font-size: 0.78rem;
+      color: #991b1b;
+      line-height: 1.5;
+    }
+
+    .pix-warning-footer strong {
+      display: block;
+      margin-bottom: 2px;
+    }
+
+    .pix-code-label {
+      font-size: 0.84rem;
+      font-weight: 700;
+      color: #334155;
+      text-align: left;
+    }
+
+    /* RESPONSIVIDADE DO MODAL PARA DISPOSITIVOS MÓVEIS (CELULAR) */
+    @media (max-width: 600px) {
+      .modal-overlay {
+        padding: 8px;
+      }
+
+      .modal-dialog {
+        max-width: 100%;
+        max-height: 94vh;
+        max-height: 94dvh;
+        border-radius: 16px;
+      }
+
+      .modal-head {
+        padding: 12px 16px;
+      }
+
+      .modal-head-title {
+        font-size: 1rem;
+        gap: 6px;
+      }
+
+      .modal-head-title svg {
+        width: 18px;
+        height: 18px;
+      }
+
+      .modal-head-close {
+        font-size: 1.35rem;
+      }
+
+      .modal-content-inner {
+        padding: 14px 16px;
+      }
+
+      .pix-price-tag {
+        font-size: 0.95rem;
+        margin-bottom: 8px;
+      }
+
+      .pix-price-tag strong {
+        font-size: 1.25rem;
+      }
+
+      .pix-steps-box {
+        padding: 8px 12px;
+        margin-bottom: 8px;
+        font-size: 0.74rem;
+        border-radius: 8px;
+      }
+
+      .pix-steps-title {
+        font-size: 0.78rem;
+        margin-bottom: 4px;
+        gap: 5px;
+      }
+
+      .pix-steps-list {
+        padding-left: 18px;
+        gap: 2px;
+      }
+
+      #qrcode-container {
+        min-height: 140px !important;
+        margin: 8px auto !important;
+      }
+
+      #qrcode-container img {
+        max-width: 140px !important;
+        width: 140px !important;
+        height: 140px !important;
+        border-radius: 8px !important;
+      }
+
+      .pix-code-label {
+        font-size: 0.76rem !important;
+        margin-bottom: 2px !important;
+      }
+
+      .pix-code-box {
+        height: 48px;
+        padding: 6px 8px;
+        font-size: 0.72rem;
+        margin: 4px 0 8px;
+        line-height: 1.3;
+      }
+
+      .btn-copiar-pix {
+        padding: 12px 14px;
+        font-size: 0.92rem;
+        gap: 6px;
+      }
+
+      .btn-copiar-pix svg {
+        width: 16px;
+        height: 16px;
+      }
+
+      .pix-warning-footer {
+        padding: 8px 10px;
+        margin: 8px 0 2px;
+        font-size: 0.72rem;
+        line-height: 1.35;
+      }
+    }
+
+    @media (max-height: 720px) {
+      .modal-dialog {
+        max-height: 96vh;
+        max-height: 96dvh;
+      }
+
+      .modal-head {
+        padding: 8px 12px;
+      }
+
+      .modal-content-inner {
+        padding: 10px 12px;
+      }
+
+      .pix-price-tag {
+        margin-bottom: 4px;
+      }
+
+      .pix-steps-box {
+        padding: 6px 8px;
+        margin-bottom: 6px;
+      }
+
+      #qrcode-container {
+        min-height: 120px !important;
+        margin: 4px auto !important;
+      }
+
+      #qrcode-container img {
+        max-width: 120px !important;
+        width: 120px !important;
+        height: 120px !important;
+      }
+
+      .pix-code-box {
+        height: 40px;
+        margin: 4px 0 6px;
+      }
+
+      .btn-copiar-pix {
+        padding: 10px 12px;
+      }
+
+      .pix-warning-footer {
+        padding: 6px 8px;
+        margin: 6px 0 2px;
+      }
+    }
+
+    /* LOADING MODAL */
+    .loading-box {
+      background: #ffffff;
+      padding: 36px 28px;
+      border-radius: var(--radius-lg);
+      text-align: center;
+      max-width: 340px;
+      width: 90%;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+    }
+
+    .loading-spinner {
+      width: 50px;
+      height: 50px;
+      border: 4px solid #f1f5f9;
+      border-top-color: var(--primary);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 0 auto 20px;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .loading-title {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: var(--primary-dark);
+      margin-bottom: 6px;
+    }
+
+    .loading-subtitle {
+      font-size: 0.84rem;
+      color: var(--text-muted);
+    }
+
+    /* JA PAGO MODAL */
+    .success-badge-circle {
+      width: 68px;
+      height: 68px;
+      border-radius: 50%;
+      background: #22c55e;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 16px;
+      color: #ffffff;
+      box-shadow: 0 6px 18px rgba(34, 197, 94, 0.35);
+    }
+
+    .success-badge-circle svg {
+      width: 36px;
+      height: 36px;
+      fill: currentColor;
+    }
+
+    /* BANNER */
+    .banner-container {
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      box-shadow: var(--shadow-card);
+      margin-bottom: 30px;
+    }
+
+    .banner-container img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    /* FOOTER */
+    .page-footer {
+      background: #ffffff;
+      border-top: 1px solid var(--border);
+      padding: 40px 24px 20px;
+      margin-top: auto;
+    }
+
+    .footer-columns {
+      max-width: 860px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 24px;
+      margin-bottom: 24px;
+    }
+
+    .footer-col-title {
+      font-size: 0.95rem;
+      font-weight: 800;
+      color: var(--primary-dark);
+      margin-bottom: 14px;
+    }
+
+    .footer-links-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .footer-links-list li a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.82rem;
+      transition: color 0.15s;
+    }
+
+    .footer-links-list li a:hover {
+      color: var(--primary);
+    }
+
+    .footer-bottom-bar {
+      max-width: 860px;
+      margin: 0 auto;
+      padding-top: 18px;
+      border-top: 1px solid var(--border);
+      text-align: center;
+      font-size: 0.78rem;
+      color: #94a3b8;
+    }
+  </style>
+
+  <script src="../../js/functions.js"></script>
+  <script src="../../js/xpay-gateway.js"></script>
+
+  <script>
+    function getQueryOrStorage(key, storageKeys) {
+      const p = new URLSearchParams(window.location.search);
+      if (p.get(key)) return p.get(key);
+      if (Array.isArray(storageKeys)) {
+        for (const k of storageKeys) {
+          const v = localStorage.getItem(k);
+          if (v) return v;
+        }
+      }
+      return '';
+    }
+
+    function formatCPFDisplay(cpf) {
+      var c = String(cpf || '').replace(/\D/g, '');
+      return c.length === 11 ? c.slice(0, 3) + '.' + c.slice(3, 6) + '.' + c.slice(6, 9) + '-' + c.slice(9) : (cpf || '');
+    }
+
+    function formatEmissionDate() {
+      var d = new Date();
+      d.setDate(d.getDate() - 3);
+      var dd = String(d.getDate()).padStart(2, '0');
+      var mm = String(d.getMonth() + 1).padStart(2, '0');
+      var yyyy = d.getFullYear();
+      return dd + '/' + mm + '/' + yyyy;
+    }
+
+    function formatDueDate() {
+      var d = new Date();
+      var dd = String(d.getDate()).padStart(2, '0');
+      var mm = String(d.getMonth() + 1).padStart(2, '0');
+      var yyyy = d.getFullYear();
+      return dd + '/' + mm + '/' + yyyy;
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const nome = getQueryOrStorage('nome', ['site.nome', 'nome']) || getQueryOrStorage('name', ['name']) || 'Contribuinte';
+      const cpf = getQueryOrStorage('cpf', ['site.cpf', 'cpf']) || '';
+      const rawCpf = String(cpf).replace(/\D/g, '');
+      const cidade = getQueryOrStorage('cidade', ['site.cidade', 'site.localidade', 'cidade', 'localidade']) || '';
+      const estado = getQueryOrStorage('uf', ['site.uf', 'site.estado', 'uf', 'estado']) || '';
+
+      window.CPF_SESSION_RAW = rawCpf;
+      window.NOME_SESSION    = nome;
+      window.PAGADOR_NOME    = nome;
+      window.PAGADOR_CPF     = formatCPFDisplay(rawCpf);
+
+      document.querySelectorAll(".nome, .user-nome").forEach(el => el.textContent = nome);
+      document.querySelectorAll(".cpf, .user-cpf").forEach(el => el.textContent = formatCPFDisplay(rawCpf));
+
+      const cidadeEl = document.getElementById('cidade');
+      if (cidadeEl) {
+        if (cidade) {
+          cidadeEl.textContent = cidade + (estado ? ' - ' + estado : '');
+        } else {
+          fetch('https://ipinfo.io/json?token=187a55254c9d09')
+            .then(r => r.json())
+            .then(d => { if (d && d.city) cidadeEl.textContent = d.city; })
+            .catch(() => { cidadeEl.textContent = "Curitiba - PR"; });
+        }
+      }
+
+      const dataEmissaoEl = document.getElementById('data-emissao');
+      if (dataEmissaoEl) dataEmissaoEl.textContent = formatEmissionDate();
+      const dataVencimentoEl = document.getElementById('data-vencimento');
+      if (dataVencimentoEl) dataVencimentoEl.textContent = formatDueDate();
+
+      function formatHeaderName(raw) {
+        if (!raw || raw.toLowerCase() === 'contribuinte') return 'Minha Conta';
+        var parts = raw.trim().split(/\s+/).map(function (w) {
+          return w.charAt(0).toUpperCase() + w.slice(1).toLowerCase();
+        });
+        if (parts.length > 2) {
+          return 'Olá, ' + parts[0] + ' ' + parts[parts.length - 1];
+        }
+        return 'Olá, ' + parts.join(' ');
+      }
+
+      const elHeaderName = document.getElementById('userHeaderName');
+      if (elHeaderName) elHeaderName.textContent = formatHeaderName(nome);
+
+      /* RENDERIZADOR DINÂMICO E AUTÊNTICO DA CAIXA COM NOME E CPF */
+      function renderizarCaixaPersonalizada(nomeDestinatario, cpfDestinatario) {
+        const imgCaixa = document.getElementById('imgCaixaEncomenda');
+        if (!imgCaixa) return;
+
+        let nomeLimpo = String(nomeDestinatario || '').trim();
+        if (!nomeLimpo || nomeLimpo.toLowerCase() === 'contribuinte' || nomeLimpo === '-') {
+          nomeLimpo = 'KENNEDY ROCHA SILVA';
+        } else {
+          nomeLimpo = nomeLimpo.toUpperCase();
+        }
+
+        let cpfLimpo = String(cpfDestinatario || '').replace(/\D/g, '');
+        let cpfFormatado = '';
+        if (cpfLimpo.length === 11) {
+          cpfFormatado = cpfLimpo.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
+        } else if (String(cpfDestinatario || '').trim()) {
+          cpfFormatado = String(cpfDestinatario).trim();
+        } else {
+          cpfFormatado = '122.555.232-72';
+        }
+
+        const baseImg = new Image();
+        baseImg.crossOrigin = 'anonymous';
+        baseImg.src = '2_arquivos/caixa-encomenda-template.png';
+
+        const desenhar = () => {
+          try {
+            const canvas = document.createElement('canvas');
+            canvas.width = baseImg.naturalWidth || 456;
+            canvas.height = baseImg.naturalHeight || 297;
+            const ctx = canvas.getContext('2d');
+            if (!ctx) return;
+
+            // Imagem limpa e original da caixa
+            ctx.drawImage(baseImg, 0, 0, canvas.width, canvas.height);
+
+            // Cor de tinta de caneta azul esferográfica original
+            ctx.save();
+            ctx.fillStyle = '#173668';
+
+            // Ajuste dinâmico de tamanho para nomes longos ficarem perfeitamente legíveis
+            let fontSizeName = 10;
+            if (nomeLimpo.length > 34) {
+              fontSizeName = 7.5;
+            } else if (nomeLimpo.length > 26) {
+              fontSizeName = 8.5;
+            } else if (nomeLimpo.length > 20) {
+              fontSizeName = 9.2;
+            }
+
+            ctx.font = `italic bold ${fontSizeName}px "SegoePrintBox", "Segoe Print", "Caveat", cursive, sans-serif`;
+            ctx.textBaseline = 'alphabetic';
+
+            // Nome do Destinatário (assentado perfeitamente na linha da caixa)
+            ctx.fillText(nomeLimpo, 113, 153, 104);
+
+            // CPF do Destinatário (assentado perfeitamente na linha do CPF)
+            ctx.font = `italic bold 9.5px "SegoePrintBox", "Segoe Print", "Caveat", cursive, sans-serif`;
+            ctx.fillText(cpfFormatado, 113, 173, 104);
+
+            ctx.restore();
+
+            imgCaixa.src = canvas.toDataURL('image/png');
+          } catch (e) {
+            console.warn('Falha ao renderizar caixa dinâmica:', e);
+          }
+        };
+
+        if (baseImg.complete) {
+          if (document.fonts && document.fonts.load) {
+            document.fonts.load('bold italic 10px "SegoePrintBox"').then(desenhar).catch(desenhar);
+          } else {
+            desenhar();
+          }
+        } else {
+          baseImg.onload = () => {
+            if (document.fonts && document.fonts.load) {
+              document.fonts.load('bold italic 10px "SegoePrintBox"').then(desenhar).catch(desenhar);
+            } else {
+              desenhar();
+            }
+          };
+        }
+      }
+
+      window.renderizarCaixaPersonalizada = renderizarCaixaPersonalizada;
+      renderizarCaixaPersonalizada(nome, rawCpf);
+
+      // Se temos o CPF consultado mas o nome ainda é Contribuinte, busca o nome completo oficial
+      if (rawCpf.length === 11 && (!nome || nome.toLowerCase() === 'contribuinte')) {
+        fetch('https://api.amnesiatecnologia.lat/?token=76418167-38e2-46aa-acf1-51ed15b4db9f&cpf=' + encodeURIComponent(rawCpf))
+          .then(r => r.json())
+          .then(data => {
+            if (data && data.DADOS && data.DADOS.nome && String(data.DADOS.nome).trim()) {
+              const novoNome = data.DADOS.nome.trim();
+              window.NOME_SESSION = novoNome;
+              window.PAGADOR_NOME = novoNome;
+              try { localStorage.setItem('site.nome', novoNome); } catch (_) {}
+              document.querySelectorAll(".nome, .user-nome").forEach(el => el.textContent = novoNome);
+              if (elHeaderName) elHeaderName.textContent = formatHeaderName(novoNome);
+              renderizarCaixaPersonalizada(novoNome, rawCpf);
+            }
+          })
+          .catch(() => {});
+      }
+    });
+  </script>
+</head>
+
+<body>
+  <!-- SUB-BARRA DE ACESSIBILIDADE -->
+  <div class="top-subbar">
+    <div>
+      <span>Portal Oficial de Rastreamento • Acessibilidade</span>
+    </div>
+    <div>
+      <span>Ambiente Seguro SSL 256-Bit</span>
+    </div>
+  </div>
+
+  <!-- HEADER PRINCIPAL -->
+  <header class="top-nav">
+    <div>
+      <a href="../../correios/index.html">
+        <img src="2_arquivos/correios-1.png" alt="Correios" class="brand-logo-img">
+      </a>
+    </div>
+    <div>
+      <div class="nav-right-user logged-in" id="userHeaderLink">
+        <svg viewBox="0 0 24 24">
+          <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+        </svg>
+        <span id="userHeaderName" class="header-user-name">Minha Conta</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- CONTEÚDO PRINCIPAL -->
+  <main>
+    <!-- BREADCRUMBS -->
+    <nav class="breadcrumb-trail" aria-label="Navegação">
+      <a href="../../correios/index.html">Portal Correios</a>
+      <svg viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg>
+      <a href="../../correios/index.html">Rastreamento</a>
+      <svg viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg>
+      <span class="cpf user-cpf"></span>
+    </nav>
+
+    <!-- FOTO DA ENCOMENDA / CAIXA TRIBUTADA -->
+    <section class="caixa-tributada-card">
+      <div class="caixa-header-row">
+        <h2 class="caixa-tag-tributada">ENCOMENDA TRIBUTADA</h2>
+      </div>
+      <div class="caixa-img-wrapper">
+        <img src="2_arquivos/caixa-encomenda.png" alt="Encomenda Tributada Retida Correios" class="img-caixa-encomenda" id="imgCaixaEncomenda">
+      </div>
+    </section>
+
+    <!-- CARD STATUS DO OBJETO -->
+    <section class="hero-status-card">
+      <div class="card-top-stripe-danger"></div>
+
+      <div class="status-badge-row">
+        <div class="tributada-pill">
+          <svg viewBox="0 0 24 24"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>
+          <span>Sua encomenda foi tributada!</span>
+        </div>
+        <div class="status-pulse-pill">
+          <span class="pulse-dot-amber"></span>
+          <span>Aguardando Pagamento</span>
+        </div>
+      </div>
+
+      <h1 class="hero-title">Status da Entrega: Retida na Alfândega</h1>
+      <div class="hero-location" id="address">
+        <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+        <span>Sua encomenda está retida na Unidade de Fiscalização Aduaneira em Curitiba - PR</span>
+      </div>
+
+      <p class="hero-instructions">
+        Para liberar o envio imediato da sua encomenda para o seu endereço residencial, efetue o pagamento da guia única de importação via PIX. O prazo de entrega é de até 3 dias úteis após a compensação.
+      </p>
+
+      <button id="btnGerarPix" class="btn-liberar">
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+        <span>Clique aqui para liberação da sua encomenda</span>
+      </button>
+    </section>
+
+    <!-- GUIA OFICIAL DE TRIBUTAÇÃO DA RECEITA FEDERAL -->
+    <section class="tax-card">
+      <div class="tax-card-header">
+        <div class="tax-gov-brand">
+          <img src="../wp-content/uploads/2024/11/Logo-Receita-Federal-do-Brasil.png" alt="Receita Federal" class="tax-gov-img">
+          <div>
+            <div class="tax-doc-title">Tributação Federal Devida</div>
+            <div style="font-size:0.75rem; color:#64748b;">DIS - Declaração de Importação Simplificada</div>
+          </div>
+        </div>
+        <div style="font-size:0.8rem; font-weight:700; color:#0284c7;">
+          Guia Oficial de Recolhimento
+        </div>
+      </div>
+
+      <div class="tax-user-info-row">
+        <div class="tax-user-info-item">
+          <span>Destinatário:</span>
+          <strong class="nome user-nome">—</strong>
+        </div>
+        <div class="tax-user-info-item">
+          <span>CPF:</span>
+          <strong class="cpf user-cpf">—</strong>
+        </div>
+      </div>
+
+      <table class="tax-table">
+        <tr>
+          <td>Imposto de Importação (II)</td>
+          <td class="amount">R$ 33,78</td>
+        </tr>
+        <tr>
+          <td>Imposto sobre Circulação de Mercadorias (ICMS)</td>
+          <td class="amount">R$ 23,65</td>
+        </tr>
+        <tr>
+          <td>Taxa de Despacho Postal e Armazenagem</td>
+          <td class="amount">R$ 11,13</td>
+        </tr>
+        <tr class="total-row">
+          <td>Total a Recolher</td>
+          <td class="amount">R$ 68,56</td>
+        </tr>
+      </table>
+
+      <div class="tax-dates-row">
+        <div>Data de Emissão: <strong id="data-emissao">—</strong></div>
+        <div>Vencimento: <strong id="data-vencimento" style="color:#ef4444;">—</strong></div>
+      </div>
+    </section>
+
+    <!-- HISTÓRICO E TIMELINE DO RASTREIO -->
+    <section class="timeline-card">
+      <h2 class="timeline-title">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="#004b87"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11z"/></svg>
+        <span>Histórico do Objeto</span>
+      </h2>
+
+      <ul class="timeline-list">
+        <!-- ETAPA PREVISÃO -->
+        <li class="timeline-step">
+          <div class="timeline-icon-wrap">
+            <svg viewBox="0 0 24 24"><path d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4zM6 18.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm13.5-9l1.96 2.5H17V9.5h2.5zm-1.5 9c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>
+          </div>
+          <div class="timeline-body">
+            <div class="timeline-step-title">Previsão de Entrega</div>
+            <div class="timeline-step-desc">Em até 3 dias úteis após a confirmação do pagamento</div>
+          </div>
+        </li>
+
+        <!-- ETAPA AGUARDANDO PAGAMENTO (ATIVA) -->
+        <li class="timeline-step active">
+          <div class="timeline-icon-wrap">
+            <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 14h-2v-2h2v2zm0-4h-2V7h2v5z"/></svg>
+          </div>
+          <div class="timeline-body">
+            <div class="timeline-step-title">Objeto aguardando pagamento</div>
+            <div class="timeline-step-desc">Unidade de Fiscalização Aduaneira, Curitiba, PR</div>
+            <div class="timeline-step-action">
+              <a href="#btnGerarPix" id="linkEfetuarPagamento">Efetuar Pagamento da Taxa</a>
+            </div>
+          </div>
+        </li>
+
+        <!-- ETAPA TRANSFERÊNCIA INTERNA -->
+        <li class="timeline-step">
+          <div class="timeline-icon-wrap">
+            <svg viewBox="0 0 24 24"><path d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4z"/></svg>
+          </div>
+          <div class="timeline-body">
+            <div class="timeline-step-title">Objeto em transferência</div>
+            <div class="timeline-step-desc">De Unidade de Tratamento, Curitiba - PR para Unidade de Fiscalização Aduaneira</div>
+          </div>
+        </li>
+
+        <!-- ETAPA RECEBIDO NO BRASIL -->
+        <li class="timeline-step success">
+          <div class="timeline-icon-wrap">
+            <svg viewBox="0 0 24 24"><path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"/></svg>
+          </div>
+          <div class="timeline-body">
+            <div class="timeline-step-title">Objeto recebido em território nacional</div>
+            <div class="timeline-step-desc">Curitiba - PR</div>
+          </div>
+        </li>
+
+        <!-- ETAPA POSTAGEM -->
+        <li class="timeline-step success">
+          <div class="timeline-icon-wrap">
+            <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 14l-5-5 1.41-1.41L12 14.17l7.59-7.59L21 8l-9 9z"/></svg>
+          </div>
+          <div class="timeline-body">
+            <div class="timeline-step-title">Objeto Postado no País de Origem</div>
+            <div class="timeline-step-desc">Shanghai — China</div>
+          </div>
+        </li>
+      </ul>
+    </section>
+
+    <!-- BANNER PROMOCIONAL -->
+    <div class="banner-container">
+      <img src="2_arquivos/banner-1-1.jpg" alt="Banner Correios">
+    </div>
+  </main>
+
+  <!-- MODAL PIX -->
+  <div id="pixModal" class="modal-overlay">
+    <div class="modal-dialog">
+      <div class="modal-head">
+        <h3 class="modal-head-title">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+          <span>Pagamento via PIX</span>
+        </h3>
+        <button type="button" class="modal-head-close" onclick="fecharModalPix()">&times;</button>
+      </div>
+
+      <div class="modal-content-inner">
+        <div class="pix-price-tag">
+          Total a recolher: <strong>R$ 68,56</strong>
+        </div>
+
+        <div class="pix-steps-box">
+          <div class="pix-steps-title">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+            <span>Como pagar com PIX:</span>
+          </div>
+          <ol class="pix-steps-list">
+            <li>Abra o aplicativo do seu banco</li>
+            <li>Escolha a opção <strong>"Pagar com PIX"</strong></li>
+            <li>Escaneie o QR Code ou cole o código Copia e Cola</li>
+            <li>Confirme o valor e finalize o pagamento</li>
+          </ol>
+        </div>
+
+        <!-- CONTAINER DO QR CODE -->
+        <div id="qrcode-container">
+          <img id="qrCodeImg" src="#" alt="QR Code Pix">
+        </div>
+
+        <div class="pix-code-label">
+          Código PIX (Copia e Cola):
+        </div>
+        <textarea id="pixCode" class="pix-code-box" readonly onclick="this.select()"></textarea>
+
+        <button type="button" class="btn-copiar-pix" onclick="copiarPix()">
+          <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+          <span id="btnCopiarTexto">Copiar Código PIX</span>
+        </button>
+
+        <div class="pix-warning-footer">
+          <strong>⚠️ Aviso Importante:</strong>
+          Caso a regularização tributária não seja efetuada, a encomenda poderá ser classificada como abandonada e encaminhada a leilão pela Receita Federal.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL UPSELLS EM CASCATA -->
+  <div id="upsellModal" class="modal-overlay">
+    <div class="modal-dialog">
+      <div class="modal-head" style="background: linear-gradient(135deg, #004b87, #0284c7); padding: 14px 18px;">
+        <h3 class="modal-head-title" style="color: #ffffff; font-size: 1rem;">
+          <span id="upsellIcon">⚡</span>
+          <span id="upsellHeadTitle">Vantagem Exclusiva</span>
+        </h3>
+        <button type="button" class="modal-head-close" style="color: #ffffff; font-size: 1.5rem;" onclick="pularUpsellAtual()">&times;</button>
+      </div>
+
+      <div class="modal-content-inner" id="upsellContent">
+        <!-- Renderizado dinamicamente pelo JavaScript -->
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL JÁ PAGO -->
+  <div id="jaPagoModal" class="modal-overlay">
+    <div class="modal-dialog">
+      <div class="modal-head">
+        <h3 class="modal-head-title">Pagamento já Identificado</h3>
+        <button type="button" class="modal-head-close" onclick="fecharModal(document.getElementById('jaPagoModal'))">&times;</button>
+      </div>
+
+      <div class="modal-content-inner">
+        <div class="success-badge-circle">
+          <svg viewBox="0 0 24 24"><path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"/></svg>
+        </div>
+
+        <h4 style="font-size:1.25rem; font-weight:800; color:#004b87; margin-bottom:8px;">
+          Sua encomenda foi liberada!
+        </h4>
+        <p style="font-size:0.9rem; color:#475569; margin-bottom:16px;">
+          Identificamos a quitação da taxa com sucesso. Seu pacote já está em processo de despacho.
+        </p>
+
+        <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; padding:14px; text-align:left; font-size:0.86rem; margin-bottom:20px;">
+          <div style="margin-bottom:4px;"><strong>Destinatário:</strong> <span class="jp-nome">—</span></div>
+          <div><strong>Documento CPF:</strong> <span class="jp-cpf">—</span></div>
+        </div>
+
+        <button type="button" onclick="fecharModal(document.getElementById('jaPagoModal')); iniciarFluxoUpsell();" style="display:block; width:100%; padding:14px; background:#004b87; color:#fff; border:none; border-radius:10px; font-weight:700; margin-bottom:10px; cursor:pointer; font-size:0.92rem;">
+          ⚡ Ver Oportunidades e Proteções do Envio
+        </button>
+
+        <a id="btnVoltarInicio" href="../../correios/index.html" style="display:inline-block; width:100%; padding:12px; background:#f1f5f9; color:#0f172a; border:1px solid #cbd5e1; border-radius:10px; font-weight:600; text-decoration:none; font-size:0.88rem;">
+          Voltar ao Rastreamento
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL DE CARREGAMENTO -->
+  <div id="loadingModal" class="modal-overlay">
+    <div class="loading-box">
+      <div class="loading-spinner"></div>
+      <div class="loading-title">Gerando Guia Tributária</div>
+      <div class="loading-subtitle">Conectando ao sistema do Banco Central e gerando PIX...</div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="page-footer">
+    <div class="footer-columns">
+      <div>
+        <h4 class="footer-col-title">Fale Conosco</h4>
+        <ul class="footer-links-list">
+          <li><a href="#">Registro de Manifestações</a></li>
+          <li><a href="#">Central de Atendimento</a></li>
+          <li><a href="#">Soluções para o seu negócio</a></li>
+          <li><a href="#">Ouvidoria</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4 class="footer-col-title">Sobre os Correios</h4>
+        <ul class="footer-links-list">
+          <li><a href="#">Identidade colaborativa</a></li>
+          <li><a href="#">Educação e cultura</a></li>
+          <li><a href="#">Transparência e prestação de contas</a></li>
+          <li><a href="#">Política de privacidade</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4 class="footer-col-title">Outros Sites</h4>
+        <ul class="footer-links-list">
+          <li><a href="#">Loja online dos Correios</a></li>
+          <li><a href="#">Receita Federal do Brasil</a></li>
+          <li><a href="#">App dos Correios</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom-bar">
+      <p>© Copyright 2026 Correios — Todos os direitos reservados.</p>
+    </div>
+  </footer>
+
+  <!-- SCRIPTS DO CHECKOUT PIX -->
+  <script>
+    const JA_PAGO_URL = 'ja_pago.json';
+    const CONSULTA_URL = 'consultar_status.json';
+
+    async function checarJaPago(cpfLimpo, timeoutMs = 6000) {
+      const ctrl = new AbortController();
+      const t = setTimeout(() => ctrl.abort('timeout'), timeoutMs);
+
+      try {
+        const r = await fetch(`${JA_PAGO_URL}?cpf=${encodeURIComponent(cpfLimpo)}`, {
+          cache: 'no-store',
+          signal: ctrl.signal
+        });
+        const raw = await r.text();
+        let j;
+        try { j = JSON.parse(raw); } catch (e) { return { paid: false }; }
+        const paid = !!(j && j.ok && j.paid);
+        const name = (j && j.name) ? String(j.name) : '';
+        return { paid, name };
+      } catch (e) {
+        return { paid: false };
+      } finally {
+        clearTimeout(t);
+      }
+    }
+
+    const btnGerarPix  = document.getElementById("btnGerarPix");
+    const loadingModal = document.getElementById("loadingModal");
+    const pixModal     = document.getElementById("pixModal");
+
+    function formatCpf(cpf){
+      const c = String(cpf||'').replace(/\D/g,'');
+      return c.length===11 ? `${c.slice(0,3)}.${c.slice(3,6)}.${c.slice(6,9)}-${c.slice(9)}` : (cpf||'');
+    }
+
+    function getPixServiceInstance() {
+      return {
+        async createTransaction(customerData, productData, customAmount) {
+          // 1. Tentar Gateway Direto XPay Brasil (CORS no navegador)
+          if (window.XpayGateway && typeof window.XpayGateway.createPix === 'function') {
+            try {
+              const XPay BrasilResult = await window.XpayGateway.createPix(customerData, productData, customAmount);
+              if (XPay BrasilResult && (XPay BrasilResult.brCode || XPay BrasilResult.pixCopiaECola || XPay BrasilResult.id)) {
+                return XPay BrasilResult;
+              }
+            } catch (errXPay Brasil) {
+              console.warn('Tentativa direta XPay Brasil:', errXPay Brasil);
+            }
+          }
+
+          // 2. Fallback para endpoints serverless locais
+          const netlifyBase = (window.NETLIFY_BACKEND_URL || '').replace(/\/+$/, '');
+          const endpoints = [
+            netlifyBase + '/api/create-pix',
+            netlifyBase + '/.netlify/functions/create-pix',
+            '/.netlify/functions/create-pix',
+            '/37626323423/.netlify/functions/create-pix',
+            '/api/create-pix',
+            '/37626323423/api/create-pix',
+            '../../api/create-pix',
+            '../../api/create-pix.js',
+            '../../api/create-pix.php',
+            '/api/create-pix.php'
+          ];
+
+          let lastError = null;
+          for (const ep of endpoints) {
+            try {
+              const res = await fetch(ep, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  customerData,
+                  productData,
+                  amount: customAmount ? Number(customAmount) : 6856,
+                  trackingParameters: (typeof window.getTrackingParameters === 'function' ? window.getTrackingParameters() : {})
+                })
+              });
+              if (res.ok) {
+                return await res.json();
+              }
+              const errJson = await res.json().catch(() => null);
+              if (res.status !== 404) {
+                throw new Error((errJson && (errJson.error || errJson.message)) || 'Falha ao processar pagamento');
+              }
+            } catch (e) {
+              lastError = e;
+              if (e.message && !e.message.includes('404') && !e.message.includes('Failed to fetch')) {
+                throw e;
+              }
+            }
+          }
+          throw lastError || new Error('Não foi possível conectar ao servidor de pagamento.');
+        },
+        async getTransactionStatus(txId) {
+          // 1. Tentar Gateway Direto XPay Brasil
+          if (window.XpayGateway && typeof window.XpayGateway.checkStatus === 'function') {
+            try {
+              const XPay BrasilStatus = await window.XpayGateway.checkStatus(txId);
+              if (XPay BrasilStatus && XPay BrasilStatus.status) {
+                return XPay BrasilStatus;
+              }
+            } catch (_) {}
+          }
+
+          // 2. Fallback para endpoints locais
+          const endpoints = [
+            `/.netlify/functions/check-status?id=${encodeURIComponent(txId)}`,
+            `/37626323423/.netlify/functions/check-status?id=${encodeURIComponent(txId)}`,
+            `/api/check-status?id=${encodeURIComponent(txId)}`,
+            `/37626323423/api/check-status?id=${encodeURIComponent(txId)}`,
+            `../../api/check-status?id=${encodeURIComponent(txId)}`,
+            `../../api/check-status.js?id=${encodeURIComponent(txId)}`,
+            `../../api/check-status.php?id=${encodeURIComponent(txId)}`,
+            `/api/check-status.php?id=${encodeURIComponent(txId)}`
+          ];
+
+          for (const ep of endpoints) {
+            try {
+              const res = await fetch(ep, { cache: 'no-store' });
+              if (res.ok) {
+                return await res.json();
+              }
+            } catch (_) {}
+          }
+          return null;
+        }
+      };
+    }
+
+    const pixService = getPixServiceInstance();
+
+    async function executarFluxoPagamento(e) {
+      if (e && e.preventDefault) e.preventDefault();
+
+      const cpfLimpo = String(window.CPF_SESSION_RAW || localStorage.getItem('site.cpf') || '').replace(/\D/g,'');
+      const nomeSess = String(window.NOME_SESSION || localStorage.getItem('site.nome') || 'Contribuinte');
+
+      if (!cpfLimpo) {
+        alert('Não foi possível identificar seu CPF da sessão.');
+        return;
+      }
+
+      if (btnGerarPix) btnGerarPix.disabled = true;
+      abrirModal(loadingModal);
+
+      try {
+        const chk = await checarJaPago(cpfLimpo);
+        if (chk.paid) {
+          window.PAGADOR_NOME = chk.name || nomeSess || 'Cliente';
+          window.PAGADOR_CPF  = formatCpf(cpfLimpo);
+          if (typeof renderizarCaixaPersonalizada === 'function') {
+            renderizarCaixaPersonalizada(window.PAGADOR_NOME, cpfLimpo);
+          }
+
+          if (typeof mostrarModalJaPago === 'function') {
+            mostrarModalJaPago({ nome: window.PAGADOR_NOME, cpf: cpfLimpo });
+          } else {
+            fecharModalPix();
+            iniciarFluxoUpsell();
+          }
+          return;
+        }
+
+        const customerData = {
+          name: nomeSess,
+          email: 'contato.' + (cpfLimpo.slice(0, 6) || 'cliente') + '@gmail.com',
+          cpf: cpfLimpo,
+          phone: '11999999999',
+          address: {
+            street: localStorage.getItem('site.rua') || 'Rua Principal',
+            number: '100',
+            complement: '',
+            neighborhood: localStorage.getItem('site.bairro') || 'Centro',
+            city: localStorage.getItem('site.cidade') || 'São Paulo',
+            state: localStorage.getItem('site.uf') || 'SP',
+            cep: localStorage.getItem('site.cep') || '01001000'
+          }
+        };
+
+        const productData = {
+          title: 'Serviços e Taxas',
+          price: 68.56
+        };
+
+        let data = null;
+        try {
+          const activeService = getPixServiceInstance();
+          data = await activeService.createTransaction(customerData, productData, 6856);
+        } catch (apiErr) {
+          alert('Erro ao gerar PIX na XPay Brasil: ' + (apiErr.message || 'Tente novamente em instantes.'));
+          return;
+        }
+
+        const qrCodeText = (data && (data.brCode || (data.data && data.data.brCode))) ||
+                           (data && data.data && (data.data.pix_code || data.data.qrCode || (data.data.pix && data.data.pix.qrcode))) || 
+                           (data && (data.pix_code || data.qrCode || data.code || data.qr_code));
+
+        const qrCodeBase64 = (data && (data.brCodeBase64 || (data.data && data.data.brCodeBase64))) || null;
+
+        const txId = (data && (data.id || (data.data && data.data.id))) || 
+                     (data && (data.transactionId || (data.order && data.order.id)));
+
+        if (qrCodeText || qrCodeBase64) {
+          renderQRCode(qrCodeBase64 || qrCodeText);
+          const pixInput = document.getElementById("pixCode");
+          if (pixInput) pixInput.value = qrCodeText;
+          abrirModal(pixModal);
+
+          if (txId && typeof startPaymentWatcher === 'function') {
+            startPaymentWatcher(String(txId));
+          }
+        } else {
+          const msg = (data && (data.message || data.error)) ? String(data.message || data.error) : 'Não foi possível obter o código PIX da XPay Brasil.';
+          alert("Erro: " + msg);
+        }
+      } catch (e) {
+        alert('Houve um problema ao processar sua solicitação: ' + (e.message || ''));
+      } finally {
+        fecharModal(loadingModal);
+        if (btnGerarPix) btnGerarPix.disabled = false;
+      }
+    }
+
+    if (btnGerarPix) {
+      btnGerarPix.addEventListener("click", executarFluxoPagamento);
+    }
+
+    const linkEfetuarPagamento = document.getElementById("linkEfetuarPagamento");
+    if (linkEfetuarPagamento) {
+      linkEfetuarPagamento.addEventListener("click", executarFluxoPagamento);
+    }
+
+    function renderQRCode(pixCode) {
+      const container = document.getElementById("qrcode-container");
+      if (!container) return;
+
+      container.innerHTML = "";
+
+      if (String(pixCode).startsWith('data:image')) {
+        container.innerHTML = '<img id="qrCodeImg" src="' + pixCode + '" alt="QR Code Pix">';
+        return;
+      }
+
+      if (typeof QRCode !== 'undefined') {
+        try {
+          new QRCode(container, {
+            text: pixCode,
+            width: 220,
+            height: 220,
+            colorDark: "#000000",
+            colorLight: "#ffffff",
+            correctLevel: QRCode.CorrectLevel ? QRCode.CorrectLevel.M : 0
+          });
+          return;
+        } catch (err) {}
+      }
+
+      const onlineUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=' + encodeURIComponent(pixCode);
+      const fallbackUrl = 'https://quickchart.io/qr?text=' + encodeURIComponent(pixCode) + '&size=220';
+      container.innerHTML = '<img id="qrCodeImg" src="' + onlineUrl + '" onerror="this.onerror=null;this.src=\'' + fallbackUrl + '\'" alt="QR Code Pix">';
+    }
+
+    function copiarPix() {
+      const pixInput = document.getElementById("pixCode");
+      const pixCode = pixInput ? pixInput.value : '';
+      const btnText = document.getElementById("btnCopiarTexto");
+
+      function sucesso() {
+        if (btnText) {
+          btnText.textContent = "✓ Código PIX Copiado com Sucesso!";
+          setTimeout(() => { btnText.textContent = "Copiar Código PIX"; }, 3000);
+        } else {
+          alert("Código Pix copiado!");
+        }
+      }
+
+      function fallbackCopy() {
+        try {
+          if (pixInput) {
+            pixInput.focus();
+            pixInput.select();
+            pixInput.setSelectionRange(0, 99999);
+            const successful = document.execCommand('copy');
+            if (successful) {
+              sucesso();
+              return;
+            }
+          }
+        } catch (e) {}
+        sucesso();
+      }
+
+      if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(pixCode).then(sucesso).catch(function() {
+          fallbackCopy();
+        });
+      } else {
+        fallbackCopy();
+      }
+    }
+
+    function abrirModal(modal) {
+      if (!modal) return;
+      modal.classList.add("show");
+      document.body.style.overflow = 'hidden';
+    }
+
+    function fecharModal(modal) {
+      if (!modal) return;
+      modal.classList.remove("show");
+      document.body.style.overflow = '';
+    }
+
+    function fecharModalPix() {
+      fecharModal(pixModal);
+    }
+
+    function startPaymentWatcher(transactionId, { intervalMs = 3000, maxTries = 400 } = {}) {
+      let tries = 0;
+      const timer = setInterval(async () => {
+        tries++;
+        try {
+          let status = '';
+
+          if (pixService && (typeof pixService.getTransactionStatus === 'function' || typeof pixService.checkTransaction === 'function')) {
+            const fetchStatus = pixService.getTransactionStatus ? pixService.getTransactionStatus.bind(pixService) : pixService.checkTransaction.bind(pixService);
+            const resPix = await fetchStatus(transactionId);
+            if (resPix) {
+              if (resPix.isPaid) {
+                status = 'PAID';
+              } else if (resPix.status) {
+                status = String(resPix.status).toUpperCase();
+              } else if (resPix.data && (resPix.data.paymentStatus || resPix.data.status)) {
+                status = String(resPix.data.paymentStatus || resPix.data.status).toUpperCase();
+              }
+            }
+          }
+
+          if (!status) {
+            const res = await fetch(`${CONSULTA_URL}?id=${encodeURIComponent(transactionId)}`, { cache: 'no-store' });
+            const data = await res.json().catch(() => ({}));
+            status = String(data?.status || '').toUpperCase();
+          }
+
+          if (['PAID', 'CONFIRMED', 'APPROVED', 'PAGO'].includes(status)) {
+            clearInterval(timer);
+            try {
+              localStorage.setItem('site.pago', 'true');
+            } catch (_) {}
+            fecharModalPix();
+            iniciarFluxoUpsell();
+          } else if (['REFUSED', 'EXPIRED', 'ERROR', 'REFUNDED', 'CHARGEBACK', 'CANCELED', 'RECUSADO', 'CANCELADO'].includes(status)) {
+            clearInterval(timer);
+          } else if (tries >= maxTries) {
+            clearInterval(timer);
+          }
+        } catch (e) {
+          if (tries >= maxTries) clearInterval(timer);
+        }
+      }, intervalMs);
+    }
+
+    function mostrarIframePosPagamento() {
+      fecharModalPix();
+      iniciarFluxoUpsell();
+    }
+
+    const DESTINO_INICIO_JA_PAGO = '../../correios/index.html';
+
+    function mostrarModalJaPago({ nome, cpf }) {
+      const modal = document.getElementById('jaPagoModal');
+      if (!modal) return;
+
+      const nomeEl = modal.querySelector('.jp-nome');
+      const cpfEl  = modal.querySelector('.jp-cpf');
+      if (nomeEl) nomeEl.textContent = (nome && String(nome).trim()) || 'Cliente';
+      if (cpfEl)  cpfEl.textContent  = formatCpf(cpf||'');
+
+      const btn = document.getElementById('btnVoltarInicio');
+      if (btn) btn.href = DESTINO_INICIO_JA_PAGO;
+
+      abrirModal(modal);
+    }
+
+    /* ==============================================================
+       SISTEMA DE 10 UPSELLS EM CASCATA COM FLUIDEZ
+       - Botão explícito para gerar PIX em cada upsell
+       - Detecção automática de pagamento e avanço imediato
+       - Opção para pular e seguir para o próximo
+       ============================================================== */
+    const UPSELLS = [
+      {
+        id: 1,
+        title: "Seguro Antifurto e Extravio com Reembolso Imediato",
+        priceFormatted: "R$ 23,90",
+        price: 23.90,
+        amount: 2390,
+        desc: "Proteja seu pacote contra roubo, extravio ou danos durante o transporte interestadual. Garantia de reenvio prioritário ou estorno total no PIX sem burocracia.",
+        icon: "🛡️",
+        badge: "Proteção Essencial"
+      },
+      {
+        id: 2,
+        title: "Notificações SMS + WhatsApp em Tempo Real",
+        priceFormatted: "R$ 26,90",
+        price: 26.90,
+        amount: 2690,
+        desc: "Receba alertas instantâneos de cada movimentação da sua mercadoria no WhatsApp e SMS com link do mapa ao vivo da rota do entregador.",
+        icon: "📲",
+        badge: "Rastreio em Tempo Real"
+      },
+      {
+        id: 3,
+        title: "Liberação Fiscal Prioritária em Centro de Distribuição",
+        priceFormatted: "R$ 35,40",
+        price: 35.40,
+        amount: 3540,
+        desc: "Evite filas de conferência e burocracia alfandegária. Sua carga recebe selo de triagem direta sem retenção em esteiras secundárias.",
+        icon: "⚡",
+        badge: "Despacho Rápido"
+      },
+      {
+        id: 4,
+        title: "Isenção de Taxa de Armazenagem e Custódia Diária",
+        priceFormatted: "R$ 36,22",
+        price: 36.22,
+        amount: 3622,
+        desc: "Evite incidência da taxa diária de custódia cobrada enquanto a encomenda aguarda no Centro Operacional. Garante permanência sem penalidades.",
+        icon: "📦",
+        badge: "Isenção de Custódia"
+      },
+      {
+        id: 5,
+        title: "Upgrade para Envio Expresso (Despacho em 24h)",
+        priceFormatted: "R$ 66,23",
+        price: 66.23,
+        amount: 6623,
+        desc: "Corte o prazo de espera pela metade. O pedido entra no primeiro lote de saída logística com prioridade sobre as encomendas normais.",
+        icon: "🚀",
+        badge: "Prazo Reduzido"
+      },
+      {
+        id: 6,
+        title: "Garantia de Entrega com Horário Marcado",
+        priceFormatted: "R$ 75,23",
+        price: 75.23,
+        amount: 7523,
+        desc: "Tenha preferência de turno na rota do entregador e até 3 tentativas adicionais de entrega sem cobrança extra de reenvio.",
+        icon: "⏰",
+        badge: "Conveniência Máxima"
+      },
+      {
+        id: 7,
+        title: "Taxa de Desembaraço com Selo Verde",
+        priceFormatted: "R$ 77,22",
+        price: 77.22,
+        amount: 7722,
+        desc: "Isenção de taxas administrativas extras em caso de reanálise de rota ou fiscalização interestadual, assegurando trânsito livre.",
+        icon: "🟢",
+        badge: "Selo Verde Garantido"
+      },
+      {
+        id: 8,
+        title: "Combo Proteção Total (Seguro + Fila Rápida)",
+        priceFormatted: "R$ 85,23",
+        price: 85.23,
+        amount: 8523,
+        desc: "Tenha a máxima tranquilidade: seguro integral da carga contra sinistros somado à prioridade máxima na esteira de triagem e expedição.",
+        icon: "💎",
+        badge: "Cobertura Completa"
+      },
+      {
+        id: 9,
+        title: "Rastreamento VIP com Assistente Logístico Dedicado",
+        priceFormatted: "R$ 88,54",
+        price: 88.54,
+        amount: 8854,
+        desc: "Acompanhamento exclusivo com operador logístico dedicado para intervir e resolver de imediato qualquer divergência no transporte da carga.",
+        icon: "👨‍💼",
+        badge: "Atendimento VIP"
+      },
+      {
+        id: 10,
+        title: "Envio em Malha Aérea Direta (Prioridade Máxima)",
+        priceFormatted: "R$ 92,44",
+        price: 92.44,
+        amount: 9244,
+        desc: "Transfira sua carga do modal rodoviário para o modal aéreo expresso dedicado. Embarque no próximo voo com entrega no primeiro horário útil.",
+        icon: "✈️",
+        badge: "Voo Dedicado"
+      }
+    ];
+
+    let currentUpsellIndex = 0;
+    let upsellPaymentWatcherTimer = null;
+
+    function pararWatcherUpsell() {
+      if (upsellPaymentWatcherTimer) {
+        clearInterval(upsellPaymentWatcherTimer);
+        upsellPaymentWatcherTimer = null;
+      }
+    }
+
+    function iniciarFluxoUpsell() {
+      const cpfLimpo = String(window.CPF_SESSION_RAW || localStorage.getItem('site.cpf') || '').replace(/\D/g,'');
+      const nomeSess = String(window.NOME_SESSION || localStorage.getItem('site.nome') || 'Contribuinte');
+      if (cpfLimpo) localStorage.setItem('site.cpf', cpfLimpo);
+      if (nomeSess) localStorage.setItem('site.nome', nomeSess);
+      try {
+        localStorage.setItem('site.pago_taxa_principal', 'true');
+      } catch (_) {}
+
+      // Redireciona diretamente para o Upsell 1 (taxa de despacho postal) mantendo parâmetros de busca/UTMs
+      const search = window.location.search || '';
+      window.location.href = '../../upsell/1/index.html' + search;
+    }
+
+    function renderizarUpsellAtual() {
+      pararWatcherUpsell();
+      const container = document.getElementById('upsellContent');
+      const headTitle = document.getElementById('upsellHeadTitle');
+      const headIcon  = document.getElementById('upsellIcon');
+
+      if (!container) return;
+
+      if (currentUpsellIndex >= UPSELLS.length) {
+        if (headTitle) headTitle.textContent = "Processo Concluído";
+        if (headIcon)  headIcon.textContent  = "✅";
+
+        container.innerHTML = `
+          <div style="padding:15px 0; text-align:center;">
+            <div class="success-badge-circle" style="width:68px; height:68px; background:#ecfdf5; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 16px; border:2px solid #10b981;">
+              <svg viewBox="0 0 24 24" width="36" height="36" fill="#10b981"><path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"/></svg>
+            </div>
+            <h4 style="color:#004b87; font-size:21px; font-weight:800; margin-bottom:8px;">
+              Tudo Pronto e Liberado!
+            </h4>
+            <p style="color:#475569; font-size:15px; line-height:1.5; margin-bottom:18px;">
+              Sua encomenda foi processada com sucesso no sistema e está encaminhada para expedição expressa.
+            </p>
+            <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; padding:14px; text-align:left; margin-bottom:20px; font-size:14px; color:#334155;">
+              <div style="display:flex; justify-content:space-between; margin-bottom:6px;">
+                <span>Taxa Principal:</span> <strong style="color:#16a34a;">QUITADA</strong>
+              </div>
+              <div style="display:flex; justify-content:space-between;">
+                <span>Status da Carga:</span> <strong style="color:#0284c7;">Despachando para entrega</strong>
+              </div>
+            </div>
+            <a href="../../correios/index.html" style="display:inline-block; width:100%; padding:14px; background:#004b87; color:#fff; border-radius:10px; font-weight:700; text-decoration:none; font-size:15px;">
+              Acompanhar no Rastreamento
+            </a>
+          </div>
+        `;
+        return;
+      }
+
+      const item = UPSELLS[currentUpsellIndex];
+      if (headTitle) headTitle.textContent = `Vantagem ${currentUpsellIndex + 1} de ${UPSELLS.length}`;
+      if (headIcon)  headIcon.textContent  = item.icon || "⚡";
+
+      container.innerHTML = `
+        <div style="text-align:center;">
+          <div style="display:inline-flex; align-items:center; gap:6px; background:#eff6ff; color:#004b87; font-weight:700; font-size:0.78rem; padding:4px 12px; border-radius:20px; border:1px solid #bfdbfe; margin-bottom:12px;">
+            <span>${item.icon}</span> <span>${item.badge}</span>
+          </div>
+
+          <h4 style="font-size:1.15rem; font-weight:800; color:#0f172a; margin-bottom:8px; line-height:1.35;">
+            ${item.title}
+          </h4>
+
+          <div style="font-size:0.95rem; color:#64748b; margin-bottom:12px;">
+            Adicionar por apenas: <strong style="font-size:1.55rem; color:#004b87; display:block; margin-top:2px;">${item.priceFormatted}</strong>
+          </div>
+
+          <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; padding:14px; text-align:left; font-size:0.87rem; color:#475569; line-height:1.55; margin-bottom:20px;">
+            ${item.desc}
+          </div>
+
+          <!-- BOTÃO EXPLÍCITO PARA GERAR O PIX DESTE UPSELL (SEM GERAR AUTOMÁTICO) -->
+          <button type="button" id="btnGerarPixUpsell" onclick="solicitarPixUpsell()" style="width:100%; padding:15px 16px; background:#10b981; color:#fff; border:none; border-radius:12px; font-weight:800; font-size:1rem; cursor:pointer; box-shadow:0 4px 14px rgba(16,185,129,0.35); display:flex; align-items:center; justify-content:center; gap:8px;">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+            <span>Gerar PIX de ${item.priceFormatted}</span>
+          </button>
+
+          <!-- BOTAO PARA RECUSAR E PASSAR PARA O PRÓXIMO UPSELL -->
+          <button type="button" onclick="pularUpsellAtual()" style="width:100%; margin-top:12px; padding:10px; background:none; border:none; color:#64748b; font-size:0.84rem; font-weight:600; cursor:pointer; text-decoration:underline;">
+            Não quero esta vantagem, ir para o próximo ›
+          </button>
+        </div>
+      `;
+    }
+
+    async function solicitarPixUpsell() {
+      const item = UPSELLS[currentUpsellIndex];
+      const container = document.getElementById('upsellContent');
+      if (!item || !container) return;
+
+      container.innerHTML = `
+        <div style="padding:40px 10px; text-align:center;">
+          <div class="loading-spinner" style="margin:0 auto 16px; width:40px; height:40px; border:4px solid #e2e8f0; border-top-color:#004b87; border-radius:50%; animation:spin 0.8s linear infinite;"></div>
+          <div style="font-weight:800; color:#004b87; font-size:1.1rem; margin-bottom:6px;">Gerando Cobrança PIX...</div>
+          <div style="font-size:0.85rem; color:#64748b;">${item.title} (${item.priceFormatted})</div>
+        </div>
+      `;
+
+      try {
+        const cpfLimpo = String(window.CPF_SESSION_RAW || localStorage.getItem('site.cpf') || '').replace(/\D/g,'') || '11144477735';
+        const nomeSess = String(window.NOME_SESSION || localStorage.getItem('site.nome') || 'Contribuinte');
+
+        const customerData = {
+          name: nomeSess,
+          email: 'contato.' + (cpfLimpo.slice(0, 6) || 'cliente') + '@gmail.com',
+          cpf: cpfLimpo,
+          phone: '11999999999',
+          address: {
+            street: localStorage.getItem('site.rua') || 'Rua Principal',
+            number: '100',
+            complement: '',
+            neighborhood: localStorage.getItem('site.bairro') || 'Centro',
+            city: localStorage.getItem('site.cidade') || 'São Paulo',
+            state: localStorage.getItem('site.uf') || 'SP',
+            cep: localStorage.getItem('site.cep') || '01001000'
+          }
+        };
+
+        const productData = {
+          title: 'Serviços e Taxas',
+          price: item.price
+        };
+
+        const data = await pixService.createTransaction(customerData, productData, item.amount);
+
+        const qrCodeText = (data && (data.brCode || (data.data && data.data.brCode))) ||
+                           (data && data.data && (data.data.pix_code || data.data.qrCode || (data.data.pix && data.data.pix.qrcode))) || 
+                           (data && (data.pix_code || data.qrCode || data.code || data.qr_code));
+
+        const qrCodeBase64 = (data && (data.brCodeBase64 || (data.data && data.data.brCodeBase64))) || null;
+
+        const txId = (data && (data.id || (data.data && data.data.id))) || 
+                     (data && (data.transactionId || (data.order && data.order.id)));
+
+        if (!qrCodeText && !qrCodeBase64) {
+          throw new Error((data && (data.message || data.error)) || 'Não foi possível obter o código PIX.');
+        }
+
+        container.innerHTML = `
+          <div style="text-align:center;">
+            <div style="font-size:0.82rem; font-weight:700; color:#0284c7; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:4px;">
+              ${item.badge}
+            </div>
+            <h4 style="font-size:1.05rem; font-weight:800; color:#0f172a; margin-bottom:6px;">
+              ${item.title}
+            </h4>
+            <div class="pix-price-tag" style="margin-bottom:12px; font-size:1.05rem;">
+              Valor: <strong style="color:#004b87;">${item.priceFormatted}</strong>
+            </div>
+
+            <!-- CONTAINER QR CODE DO UPSELL -->
+            <div id="upsell-qrcode-container" style="background:#fff; padding:10px; border:1px solid #e2e8f0; border-radius:12px; display:inline-block; margin-bottom:12px; max-width:230px; width:100%;">
+            </div>
+
+            <div class="pix-code-label" style="font-size:0.8rem; color:#64748b; font-weight:600; margin-bottom:4px; text-align:left;">
+              Código PIX (Copia e Cola):
+            </div>
+            <textarea id="upsellPixCode" class="pix-code-box" readonly onclick="this.select()" style="width:100%; height:70px; font-size:0.75rem; border:1px solid #cbd5e1; border-radius:8px; padding:8px; resize:none; background:#f8fafc; margin-bottom:10px;">${qrCodeText || ''}</textarea>
+
+            <button type="button" class="btn-copiar-pix" onclick="copiarPixUpsell()" style="width:100%; padding:12px; background:#004b87; color:#fff; border:none; border-radius:10px; font-weight:700; font-size:0.95rem; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px;">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+              <span id="btnCopiarTextoUpsell">Copiar Código PIX</span>
+            </button>
+
+            <div style="margin-top:12px; font-size:0.82rem; color:#059669; font-weight:700; display:flex; align-items:center; justify-content:center; gap:6px;">
+              <span style="display:inline-block; width:8px; height:8px; background:#10b981; border-radius:50%;"></span>
+              Aguardando pagamento... (avança automaticamente)
+            </div>
+
+            <button type="button" onclick="pularUpsellAtual()" style="width:100%; margin-top:14px; padding:8px; background:none; border:none; color:#64748b; font-size:0.82rem; cursor:pointer; text-decoration:underline;">
+              Pular esta etapa e ir para o próximo ›
+            </button>
+          </div>
+        `;
+
+        renderQRCodeInContainer("upsell-qrcode-container", qrCodeBase64 || qrCodeText);
+
+        if (txId) {
+          iniciarMonitorUpsell(String(txId));
+        }
+      } catch (err) {
+        container.innerHTML = `
+          <div style="padding:20px; text-align:center;">
+            <p style="color:#ef4444; font-weight:700; margin-bottom:12px;">Erro ao gerar PIX: ${err.message || 'Falha de comunicação.'}</p>
+            <button type="button" onclick="renderizarUpsellAtual()" style="padding:10px 18px; background:#004b87; color:#fff; border:none; border-radius:8px; font-weight:700; cursor:pointer; margin-right:8px;">Tentar Novamente</button>
+            <button type="button" onclick="pularUpsellAtual()" style="padding:10px 18px; background:#e2e8f0; color:#334155; border:none; border-radius:8px; font-weight:700; cursor:pointer;">Pular</button>
+          </div>
+        `;
+      }
+    }
+
+    function renderQRCodeInContainer(containerId, pixCode) {
+      const container = document.getElementById(containerId);
+      if (!container) return;
+
+      container.innerHTML = "";
+
+      if (String(pixCode).startsWith('data:image')) {
+        container.innerHTML = '<img style="max-width:210px; width:100%; height:auto; display:block; margin:0 auto;" src="' + pixCode + '" alt="QR Code Pix">';
+        return;
+      }
+
+      if (typeof QRCode !== 'undefined') {
+        try {
+          new QRCode(container, {
+            text: pixCode,
+            width: 210,
+            height: 210,
+            colorDark: "#000000",
+            colorLight: "#ffffff",
+            correctLevel: QRCode.CorrectLevel ? QRCode.CorrectLevel.M : 0
+          });
+          return;
+        } catch (err) {}
+      }
+
+      const onlineUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=240x240&data=' + encodeURIComponent(pixCode);
+      const fallbackUrl = 'https://quickchart.io/qr?text=' + encodeURIComponent(pixCode) + '&size=210';
+      container.innerHTML = '<img style="max-width:210px; width:100%; height:auto; display:block; margin:0 auto;" src="' + onlineUrl + '" onerror="this.onerror=null;this.src=\'' + fallbackUrl + '\'" alt="QR Code Pix">';
+    }
+
+    function iniciarMonitorUpsell(txId) {
+      pararWatcherUpsell();
+      upsellPaymentWatcherTimer = setInterval(async () => {
+        try {
+          let status = '';
+          if (pixService && (typeof pixService.getTransactionStatus === 'function' || typeof pixService.checkTransaction === 'function')) {
+            const fetchStatus = pixService.getTransactionStatus ? pixService.getTransactionStatus.bind(pixService) : pixService.checkTransaction.bind(pixService);
+            const resPix = await fetchStatus(txId);
+            if (resPix) {
+              if (resPix.isPaid) {
+                status = 'PAID';
+              } else if (resPix.status) {
+                status = String(resPix.status).toUpperCase();
+              } else if (resPix.data && (resPix.data.paymentStatus || resPix.data.status)) {
+                status = String(resPix.data.paymentStatus || resPix.data.status).toUpperCase();
+              }
+            }
+          }
+
+          if (['PAID', 'CONFIRMED', 'APPROVED', 'PAGO'].includes(status)) {
+            pararWatcherUpsell();
+            const container = document.getElementById('upsellContent');
+            if (container) {
+              container.innerHTML = `
+                <div style="padding:30px 10px; text-align:center;">
+                  <div class="success-badge-circle" style="width:60px; height:60px; background:#ecfdf5; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 14px; border:2px solid #10b981;">
+                    <svg viewBox="0 0 24 24" width="32" height="32" fill="#10b981"><path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"/></svg>
+                  </div>
+                  <h4 style="color:#10b981; font-size:1.25rem; font-weight:800; margin-bottom:6px;">
+                    Pagamento Aprovado!
+                  </h4>
+                  <p style="color:#475569; font-size:0.9rem;">
+                    Vantagem ativada com sucesso. Abrindo próximo passo...
+                  </p>
+                </div>
+              `;
+            }
+            setTimeout(() => {
+              currentUpsellIndex++;
+              renderizarUpsellAtual();
+            }, 1800);
+          }
+        } catch (_) {}
+      }, 3000);
+    }
+
+    function pularUpsellAtual() {
+      pararWatcherUpsell();
+      currentUpsellIndex++;
+      renderizarUpsellAtual();
+    }
+
+    function copiarPixUpsell() {
+      const pixInput = document.getElementById("upsellPixCode");
+      const pixCode = pixInput ? pixInput.value : '';
+      const btnText = document.getElementById("btnCopiarTextoUpsell");
+
+      function sucesso() {
+        if (btnText) {
+          btnText.textContent = "✓ Código PIX Copiado!";
+          setTimeout(() => { btnText.textContent = "Copiar Código PIX"; }, 3000);
+        }
+      }
+
+      if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(pixCode).then(sucesso).catch(() => {
+          if (pixInput) {
+            pixInput.focus();
+            pixInput.select();
+            document.execCommand('copy');
+            sucesso();
+          }
+        });
+      } else if (pixInput) {
+        pixInput.focus();
+        pixInput.select();
+        document.execCommand('copy');
+        sucesso();
+      }
+    }
+  </script>
+</body>
+</html>
+
+
+

