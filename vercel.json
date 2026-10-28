@@ -1,5 +1,4 @@
 {
-  "version": 2,
   "cleanUrls": true,
   "headers": [
     {
@@ -19,24 +18,14 @@
     }
   ],
   "rewrites": [
-    { "source": "/", "destination": "/index.html" },
-    { "source": "/api/create-pix", "destination": "/api/create-pix" },
-    { "source": "/api/check-status", "destination": "/api/check-status" },
     { "source": "/.netlify/functions/create-pix", "destination": "/api/create-pix" },
     { "source": "/.netlify/functions/check-status", "destination": "/api/check-status" },
     { "source": "/correios", "destination": "/correios/index.html" },
-    { "source": "/correios/", "destination": "/correios/index.html" },
     { "source": "/1/confirmacao", "destination": "/1/confirmacao/index.html" },
-    { "source": "/1/confirmacao/", "destination": "/1/confirmacao/index.html" },
     { "source": "/2/encomenda", "destination": "/2/encomenda/index.html" },
-    { "source": "/2/encomenda/", "destination": "/2/encomenda/index.html" },
     { "source": "/upsell/1", "destination": "/upsell/1/index.html" },
-    { "source": "/upsell/1/", "destination": "/upsell/1/index.html" },
     { "source": "/upsell/2", "destination": "/upsell/2/index.html" },
-    { "source": "/upsell/2/", "destination": "/upsell/2/index.html" },
     { "source": "/upsell/3", "destination": "/upsell/3/index.html" },
-    { "source": "/upsell/3/", "destination": "/upsell/3/index.html" },
-    { "source": "/obrigado", "destination": "/obrigado/index.html" },
-    { "source": "/obrigado/", "destination": "/obrigado/index.html" }
+    { "source": "/obrigado", "destination": "/obrigado/index.html" }
   ]
 }
