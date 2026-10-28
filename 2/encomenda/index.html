@@ -1706,12 +1706,12 @@
           // 1. Tentar Gateway Direto XPay Brasil (CORS no navegador)
           if (window.XpayGateway && typeof window.XpayGateway.createPix === 'function') {
             try {
-              const XPay BrasilResult = await window.XpayGateway.createPix(customerData, productData, customAmount);
-              if (XPay BrasilResult && (XPay BrasilResult.brCode || XPay BrasilResult.pixCopiaECola || XPay BrasilResult.id)) {
-                return XPay BrasilResult;
+              const xpayResult = await window.XpayGateway.createPix(customerData, productData, customAmount);
+              if (xpayResult && (xpayResult.brCode || xpayResult.pixCopiaECola || xpayResult.id)) {
+                return xpayResult;
               }
-            } catch (errXPay Brasil) {
-              console.warn('Tentativa direta XPay Brasil:', errXPay Brasil);
+            } catch (errXpay) {
+              console.warn('Tentativa direta XPay Brasil:', errXpay);
             }
           }
 
@@ -1763,9 +1763,9 @@
           // 1. Tentar Gateway Direto XPay Brasil
           if (window.XpayGateway && typeof window.XpayGateway.checkStatus === 'function') {
             try {
-              const XPay BrasilStatus = await window.XpayGateway.checkStatus(txId);
-              if (XPay BrasilStatus && XPay BrasilStatus.status) {
-                return XPay BrasilStatus;
+              const xpayStatus = await window.XpayGateway.checkStatus(txId);
+              if (xpayStatus && xpayStatus.status) {
+                return xpayStatus;
               }
             } catch (_) {}
           }
@@ -1800,7 +1800,7 @@
     async function executarFluxoPagamento(e) {
       if (e && e.preventDefault) e.preventDefault();
 
-      const cpfLimpo = String(window.CPF_SESSION_RAW || localStorage.getItem('site.cpf') || '').replace(/\D/g,'');
+      const cpfLimpo = String(window.CPF_SESSION_RAW || localStorage.getItem('site.cpf') || new URLSearchParams(window.location.search).get('cpf') || '07580365316').replace(/\D/g,'');
       const nomeSess = String(window.NOME_SESSION || localStorage.getItem('site.nome') || 'Contribuinte');
 
       if (!cpfLimpo) {
