@@ -82,8 +82,8 @@ async function handler(eventOrReq, contextOrRes) {
     const res = contextOrRes;
 
     res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Headers', '*');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, X-API-KEY, Authorization, X-Requested-With, Accept, Origin, User-Agent, X-CSRF-Token');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
 
     if (req.method === 'OPTIONS') return res.status(200).end();
 
@@ -134,4 +134,5 @@ async function handler(eventOrReq, contextOrRes) {
   }
 }
 
-module.exports = { handler };
+module.exports = handler;
+module.exports.handler = handler;
