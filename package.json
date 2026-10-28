@@ -1,0 +1,12 @@
+{
+  "name": "correios-xpay-pix",
+  "version": "1.0.0",
+  "description": "Funil Correios com Gateway XPay Brasil e Vercel",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
