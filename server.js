@@ -17,235 +17,395 @@ const VARIANT_B_HTML = `<!DOCTYPE html>
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>João Consultoria & Gestão Empresarial | Guia de Produtividade e Negócios</title>
-  <meta name="description" content="Consultoria especializada em diagnóstico empresarial, gestão financeira eficiente e estruturação estratégica para pequenas e médias empresas.">
+  <title>Guia Digital de Encomendas & Logística | João Victor Antunes Schilipak</title>
+  <meta name="description" content="Conheça o e-book informativo sobre rastreamento de encomendas, status de envio, prazos de entrega e desembaraço de compras nacionais e internacionais.">
+  <meta name="robots" content="index, follow">
   <style>
     :root {
-      --primary: #1e3a8a;
-      --primary-dark: #0f172a;
-      --accent: #2563eb;
-      --bg: #f8fafc;
-      --card-bg: #ffffff;
-      --text: #1e293b;
-      --text-muted: #64748b;
-      --border: #e2e8f0;
+      --ink: #163f39;
+      --paper: #faf8f3;
+      --soft: #f0ece3;
+      --accent: #b94224;
+      --coral: #ef6b47;
+      --muted: #51645e;
+      --line: #d6ded7;
+      --white: #ffffff;
+      --radius: 14px;
     }
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      background-color: var(--bg);
-      color: var(--text);
-      line-height: 1.6;
+      background-color: var(--paper);
+      color: var(--ink);
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: inherit; text-decoration: none; }
+    .wrap {
+      width: min(1120px, calc(100% - 40px));
+      margin: 0 auto;
     }
     header {
-      background: #ffffff;
-      border-bottom: 1px solid var(--border);
+      background: rgba(250, 248, 243, 0.98);
+      border-bottom: 1px solid var(--line);
       position: sticky;
       top: 0;
-      z-index: 40;
+      z-index: 50;
+      backdrop-filter: blur(6px);
     }
-    .nav-container {
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 16px 20px;
+    .header-inner {
+      min-height: 76px;
       display: flex;
+      align-items: center;
       justify-content: space-between;
-      align-items: center;
-    }
-    .brand {
-      font-weight: 800;
-      font-size: 1.25rem;
-      color: var(--primary);
-      text-decoration: none;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .brand span {
-      background: var(--primary);
-      color: #fff;
-      padding: 4px 8px;
-      border-radius: 6px;
-      font-size: 0.85rem;
-    }
-    nav a {
-      color: var(--text-muted);
-      text-decoration: none;
-      font-size: 0.9rem;
-      font-weight: 600;
-      margin-left: 20px;
-      transition: color 0.2s;
-    }
-    nav a:hover { color: var(--accent); }
-    .hero {
-      background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%);
-      color: #ffffff;
-      padding: 60px 20px;
-      text-align: center;
-    }
-    .hero h1 {
-      font-size: 2.2rem;
-      font-weight: 800;
-      max-width: 800px;
-      margin: 0 auto 16px;
-      line-height: 1.25;
-    }
-    .hero p {
-      font-size: 1.1rem;
-      color: #cbd5e1;
-      max-width: 650px;
-      margin: 0 auto;
-    }
-    .main-container {
-      max-width: 1100px;
-      margin: 40px auto;
-      padding: 0 20px;
-      display: grid;
-      grid-template-columns: 2fr 1fr;
-      gap: 32px;
-    }
-    @media (max-width: 768px) {
-      .main-container { grid-template-columns: 1fr; }
-      .hero h1 { font-size: 1.7rem; }
-    }
-    .article-card {
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 32px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-    }
-    .tag {
-      display: inline-block;
-      background: #eff6ff;
-      color: var(--accent);
-      font-weight: 700;
-      font-size: 0.75rem;
-      padding: 4px 10px;
-      border-radius: 20px;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      margin-bottom: 12px;
-    }
-    .article-card h2 {
-      font-size: 1.6rem;
-      margin-bottom: 16px;
-      color: var(--primary-dark);
-      line-height: 1.3;
-    }
-    .article-meta {
-      font-size: 0.85rem;
-      color: var(--text-muted);
-      margin-bottom: 24px;
-      border-bottom: 1px solid var(--border);
-      padding-bottom: 12px;
-    }
-    .article-body p {
-      margin-bottom: 16px;
-      color: #334155;
-    }
-    .article-body h3 {
-      font-size: 1.25rem;
-      margin: 24px 0 12px;
-      color: var(--primary-dark);
-    }
-    .sidebar-card {
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 24px;
-      margin-bottom: 24px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-    }
-    .sidebar-card h3 {
-      font-size: 1.1rem;
-      margin-bottom: 14px;
-      color: var(--primary-dark);
-      border-bottom: 2px solid var(--accent);
-      padding-bottom: 6px;
-      display: inline-block;
-    }
-    .service-list {
-      list-style: none;
-    }
-    .service-list li {
-      padding: 10px 0;
-      border-bottom: 1px solid #f1f5f9;
-      font-size: 0.92rem;
-      font-weight: 500;
-    }
-    .service-list li:last-child { border: none; }
-    footer {
-      background: #0f172a;
-      color: #94a3b8;
-      padding: 40px 20px;
-      margin-top: 60px;
-      font-size: 0.88rem;
-    }
-    .footer-container {
-      max-width: 1100px;
-      margin: 0 auto;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
       gap: 20px;
     }
-    .footer-links a {
-      color: #cbd5e1;
-      text-decoration: none;
-      margin-left: 16px;
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .brand-mark {
+      width: 40px;
+      height: 40px;
+      background: var(--ink);
+      color: var(--paper);
+      border-radius: 8px;
+      display: grid;
+      place-items: center;
+      font-weight: 800;
+      font-size: 1.1rem;
+    }
+    .brand-text {
+      font-size: 0.95rem;
+      font-weight: 700;
+      line-height: 1.25;
+    }
+    .brand-text small {
+      display: block;
+      font-size: 0.72rem;
+      color: var(--muted);
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+    nav {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+    nav a {
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--muted);
+      transition: color 0.2s;
+    }
+    nav a:hover { color: var(--ink); }
+    .hero {
+      padding: 64px 0 48px;
+      background: linear-gradient(180deg, rgba(240, 236, 227, 0.5) 0%, rgba(250, 248, 243, 0) 100%);
+      border-bottom: 1px solid var(--line);
+    }
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 40px;
+      align-items: center;
+    }
+    @media (max-width: 860px) {
+      .hero-grid { grid-template-columns: 1fr; }
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent);
+      background: #fbeee9;
+      padding: 6px 14px;
+      border-radius: 20px;
+      margin-bottom: 20px;
+    }
+    .hero h1 {
+      font-size: clamp(2.1rem, 4vw, 3.2rem);
+      font-weight: 800;
+      line-height: 1.15;
+      letter-spacing: -0.03em;
+      color: var(--ink);
+      margin-bottom: 18px;
+    }
+    .hero h1 span { color: var(--accent); }
+    .hero p.lead {
+      font-size: 1.1rem;
+      color: var(--muted);
+      margin-bottom: 24px;
+      line-height: 1.6;
+    }
+    .hero-box {
+      background: var(--white);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 28px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.04);
+    }
+    .hero-box h3 {
+      font-size: 1.15rem;
+      margin-bottom: 14px;
+      color: var(--ink);
+    }
+    .box-info {
+      list-style: none;
+      margin-bottom: 20px;
+    }
+    .box-info li {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 0;
+      border-bottom: 1px solid #f1f3f1;
+      font-size: 0.9rem;
+    }
+    .box-info li strong { color: var(--ink); }
+    .price-tag {
+      background: var(--soft);
+      padding: 14px 18px;
+      border-radius: 10px;
+      text-align: center;
+      margin-bottom: 16px;
+    }
+    .price-tag .val {
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: var(--ink);
+    }
+    .price-tag .sub {
+      font-size: 0.78rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .btn-action {
+      display: block;
+      width: 100%;
+      text-align: center;
+      padding: 14px;
+      background: var(--ink);
+      color: var(--white);
+      font-weight: 700;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      cursor: pointer;
+      border: none;
+      transition: background 0.2s;
+    }
+    .btn-action:hover { background: #23594e; }
+    .content-section {
+      padding: 56px 0;
+    }
+    .section-title {
+      font-size: 1.85rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-bottom: 12px;
+      color: var(--ink);
+    }
+    .section-subtitle {
+      color: var(--muted);
+      font-size: 1rem;
+      max-width: 650px;
+      margin-bottom: 36px;
+    }
+    .chapters-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 24px;
+    }
+    .chapter-card {
+      background: var(--white);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 24px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .chapter-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 14px rgba(0,0,0,0.05);
+    }
+    .chapter-num {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 800;
+      color: var(--accent);
+      background: #fbeee9;
+      padding: 4px 10px;
+      border-radius: 6px;
+      margin-bottom: 12px;
+    }
+    .chapter-card h4 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+      color: var(--ink);
+    }
+    .chapter-card p {
+      font-size: 0.88rem;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+    .faq-container {
+      margin-top: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    details {
+      background: var(--white);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 16px 20px;
       cursor: pointer;
     }
-    .footer-links a:hover { text-decoration: underline; }
+    details summary {
+      font-weight: 700;
+      color: var(--ink);
+      font-size: 0.95rem;
+      list-style: none;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    details summary::-webkit-details-marker { display: none; }
+    details summary::after {
+      content: "+";
+      font-size: 1.3rem;
+      color: var(--muted);
+    }
+    details[open] summary::after { content: "−"; }
+    details p {
+      margin-top: 12px;
+      font-size: 0.88rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+    .notice-box {
+      background: var(--soft);
+      border-left: 4px solid var(--ink);
+      padding: 20px;
+      border-radius: 6px;
+      margin: 40px 0;
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+    .notice-box strong { color: var(--ink); }
+    footer {
+      background: #112824;
+      color: #cbd5e1;
+      padding: 48px 0 32px;
+      font-size: 0.85rem;
+      border-top: 1px solid #1f3f39;
+    }
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 1.4fr 1fr;
+      gap: 40px;
+      margin-bottom: 32px;
+    }
+    @media (max-width: 768px) {
+      .footer-grid { grid-template-columns: 1fr; }
+    }
+    .footer-col h4 {
+      color: #ffffff;
+      font-size: 1rem;
+      margin-bottom: 16px;
+    }
+    .footer-col p {
+      margin-bottom: 8px;
+      line-height: 1.6;
+      color: #94a3b8;
+    }
+    .footer-links {
+      display: flex;
+      gap: 18px;
+      margin-top: 14px;
+      flex-wrap: wrap;
+    }
+    .footer-links a {
+      color: #f1f5f9;
+      text-decoration: underline;
+      cursor: pointer;
+    }
+    .footer-bottom {
+      border-top: 1px solid rgba(255,255,255,0.1);
+      padding-top: 24px;
+      text-align: center;
+      color: #64748b;
+      font-size: 0.78rem;
+    }
     .modal {
       display: none;
       position: fixed;
       top: 0; left: 0;
       width: 100%; height: 100%;
-      background: rgba(15,23,42,0.7);
+      background: rgba(15, 23, 42, 0.75);
       backdrop-filter: blur(4px);
-      z-index: 100;
+      z-index: 1000;
       align-items: center;
       justify-content: center;
       padding: 20px;
     }
     .modal.active { display: flex; }
     .modal-content {
-      background: #ffffff;
+      background: var(--white);
+      color: var(--ink);
       border-radius: 12px;
-      max-width: 650px;
-      max-height: 80vh;
+      max-width: 680px;
+      max-height: 82vh;
       overflow-y: auto;
-      padding: 28px;
-      box-shadow: 0 20px 25px -5px rgba(0,0,0,0.2);
+      padding: 30px;
+      box-shadow: 0 20px 25px -5px rgba(0,0,0,0.3);
     }
     .modal-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
       margin-bottom: 16px;
-      border-bottom: 1px solid var(--border);
-      padding-bottom: 12px;
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 10px;
     }
+    .modal-header h3 { font-size: 1.25rem; color: var(--ink); }
     .modal-close {
       background: none;
       border: none;
-      font-size: 1.5rem;
+      font-size: 1.6rem;
       cursor: pointer;
-      color: var(--text-muted);
+      color: var(--muted);
+      line-height: 1;
+    }
+    .modal-body p {
+      font-size: 0.88rem;
+      color: #334155;
+      margin-bottom: 12px;
+      line-height: 1.6;
     }
   </style>
 </head>
 <body>
+
   <header>
-    <div class="nav-container">
-      <a href="/" class="brand">
-        <span>JG</span> João Consultoria & Guia
-      </a>
+    <div class="wrap header-inner">
+      <div class="brand">
+        <div class="brand-mark">JG</div>
+        <div class="brand-text">
+          Guia Digital de Encomendas
+          <small>João Victor Antunes Schilipak</small>
+        </div>
+      </div>
       <nav>
-        <a href="#artigo">Artigo</a>
-        <a href="#servicos">Metodologia</a>
+        <a href="#conteudo">Conteúdo</a>
+        <a href="#faq">Dúvidas</a>
         <a href="javascript:void(0)" onclick="openModal('modalPrivacidade')">Privacidade</a>
         <a href="javascript:void(0)" onclick="openModal('modalTermos')">Termos</a>
       </nav>
@@ -253,91 +413,162 @@ const VARIANT_B_HTML = `<!DOCTYPE html>
   </header>
 
   <section class="hero">
-    <h1>Estratégia, Planejamento e Crescimento Sustentável para Empresas</h1>
-    <p>Orientações práticas para otimização de rotinas, controle orçamentário e estruturação de negócios no mercado atual.</p>
+    <div class="wrap hero-grid">
+      <div>
+        <div class="badge">E-book & Material Educativo</div>
+        <h1>Guia Prático de <span>Encomendas & Logística</span></h1>
+        <p class="lead">
+          Um manual digital completo para compreender etapas de transporte, decifrar códigos e status de rastreamento, prazos oficiais e como solucionar ocorrências em entregas nacionais e internacionais.
+        </p>
+        <p style="font-size: 0.9rem; color: var(--muted);">
+          Elaborado de forma didática e acessível para o consumidor final, orientando seus direitos conforme o Código de Defesa do Consumidor e as diretrizes de comércio eletrônico.
+        </p>
+      </div>
+
+      <div class="hero-box">
+        <h3>Ficha Técnica da Publicação</h3>
+        <ul class="box-info">
+          <li><span>Título:</span> <strong>Guia Digital de Encomendas</strong></li>
+          <li><span>Autor / Resp.:</span> <strong>João Victor Antunes Schilipak</strong></li>
+          <li><span>Formato:</span> <strong>Digital (PDF / E-book)</strong></li>
+          <li><span>Páginas:</span> <strong>64 páginas ilustradas</strong></li>
+          <li><span>Edição:</span> <strong>2026 — Revisada</strong></li>
+        </ul>
+        <div class="price-tag">
+          <div class="sub">Valor Informado</div>
+          <div class="val">R$ 47,90</div>
+          <div class="sub">Pagamento Único • Acesso Imediato</div>
+        </div>
+        <button class="btn-action" onclick="alert('No momento as inscrições para esta edição do e-book estão temporariamente encerradas para atualização de conteúdo.')">
+          Adquirir Exemplar Digital
+        </button>
+      </div>
+    </div>
   </section>
 
-  <main class="main-container">
-    <article class="article-card" id="artigo">
-      <span class="tag">Gestão & Estratégia</span>
-      <h2>Os 5 Fundamentos da Eficiência Financeira e Governança Operacional</h2>
-      <div class="article-meta">Por João Silva — Consultor em Gestão e Estruturação de Processos • Atualizado em 2026</div>
-      <div class="article-body">
-        <p>A longevidade e a competitividade de qualquer empreendimento dependem diretamente de processos operacionais padronizados e de uma vigilância rigorosa sobre a saúde orçamentária. Em cenários de volatilidade econômica, empresas que dominam a leitura de seus indicadores de desempenho destacam-se com facilidade.</p>
-        
-        <h3>1. Gestão Contínua do Fluxo de Caixa</h3>
-        <p>O fluxo de caixa operacional não é apenas um demonstrativo contábil, mas o oxigênio da operação cotidiana. Manter a conciliação bancária atualizada e simular cenários futuros previne surpresas com obrigações e permite identificar sazonalidades no faturamento.</p>
+  <main class="wrap">
+    <section class="content-section" id="conteudo">
+      <h2 class="section-title">O que você aprenderá neste material</h2>
+      <p class="section-subtitle">
+        Capítulos estruturados para resolver as principais dúvidas sobre fretes, postagens e desembaraço de encomendas.
+      </p>
 
-        <h3>2. Otimização de Custos e Auditoria de Despesas</h3>
-        <p>Diferenciar custos estratégicos (aqueles que alavancam valor) de despesas supérfluas é o primeiro passo para uma margem operacional saudável. Uma auditoria periódica em contratos de fornecedores e serviços recorrentes é recomendada semestralmente.</p>
+      <div class="chapters-grid">
+        <div class="chapter-card">
+          <span class="chapter-num">Módulo 1</span>
+          <h4>Status e Códigos de Rastreio</h4>
+          <p>Significado de cada termo: Objeto postado, Em trânsito, Objeto retido para fiscalização, e Objeto aguardando retirada.</p>
+        </div>
 
-        <h3>3. Padronização e Produtividade Operacional</h3>
-        <p>Gargalos operacionais geram retrabalho e insatisfação nos clientes. A adoção de manuais de procedimentos simplificados e ferramentas de acompanhamento permite que cada colaborador saiba exatamente o que entregar com qualidade consistente.</p>
+        <div class="chapter-card">
+          <span class="chapter-num">Módulo 2</span>
+          <h4>Prazos e Modalidades de Envio</h4>
+          <p>Diferenças práticas entre frete econômico (PAC), expresso (Sedex) e transportadoras particulares, com tabela de médias de entrega.</p>
+        </div>
 
-        <h3>4. Conformidade Tributária e Governança</h3>
-        <p>O planejamento tributário preventivo assegura que a empresa utilize regimes favoráveis e mantenha suas certidões em dia, eliminando passivos e viabilizando linhas de crédito saudáveis.</p>
+        <div class="chapter-card">
+          <span class="chapter-num">Módulo 3</span>
+          <h4>Taxas e Desembaraço Aduaneiro</h4>
+          <p>Como funciona o Programa Remessa Conforme, alíquotas de ICMS e Imposto de Importação, e como efetuar pagamentos com segurança.</p>
+        </div>
 
-        <h3>5. Decisões Baseadas em Métricas Concretas</h3>
-        <p>O achismo é o maior inimigo do crescimento. Definir KPIs transparentes para faturamento, margem de contribuição e custo de aquisição garante estabilidade e clareza para investimentos futuros.</p>
+        <div class="chapter-card">
+          <span class="chapter-num">Módulo 4</span>
+          <h4>Direitos e Ocorrências</h4>
+          <p>Procedimentos oficiais em caso de extravio, sinistro, avaria ou atraso injustificado, e modelos de reclamação formal.</p>
+        </div>
       </div>
-    </article>
+    </section>
 
-    <aside>
-      <div class="sidebar-card" id="servicos">
-        <h3>Áreas de Orientação</h3>
-        <ul class="service-list">
-          <li>✓ Diagnóstico e Auditoria Operacional</li>
-          <li>✓ Planejamento Orçamentário e Previsão</li>
-          <li>✓ Redução de Despesas Administrativas</li>
-          <li>✓ Mapeamento e Padronização de Rotinas</li>
-          <li>✓ Governança e Melhores Práticas</li>
-        </ul>
-      </div>
+    <div class="notice-box">
+      <strong>Aviso de Transparência e Isenção:</strong> Este website e o e-book comercializado têm caráter estritamente educativo, editorial e de orientação ao consumidor. Não possuímos vínculo operacional, societário ou representação oficial com a Empresa Brasileira de Correios e Telégrafos (ECT), Receita Federal do Brasil ou quaisquer transportadoras privadas. Não realizamos consultas de encomendas individuais em bancos de dados restritos.
+    </div>
 
-      <div class="sidebar-card">
-        <h3>Atendimento Institucional</h3>
-        <p style="font-size:0.9rem; color:#475569; margin-bottom:12px;">Para dúvidas corporativas, orçamentos e contato:</p>
-        <p style="font-size:0.9rem; font-weight:600; color:var(--primary);">contato@joao-consultorguia.online</p>
-        <p style="font-size:0.8rem; color:var(--text-muted); margin-top:8px;">Segunda a Sexta — 09:00 às 18:00 (Horário de Brasília)</p>
+    <section class="content-section" id="faq">
+      <h2 class="section-title">Perguntas Frequentes</h2>
+      <p class="section-subtitle">Tire suas principais dúvidas sobre o material digital.</p>
+
+      <div class="faq-container">
+        <details>
+          <summary>Como recebo o acesso ao Guia Digital?</summary>
+          <p>O material é 100% digital em formato PDF. Após a confirmação da compra, você recebe o link de download direto no seu e-mail cadastrado, podendo ler no celular, tablet ou computador.</p>
+        </details>
+
+        <details>
+          <summary>Este guia realiza o rastreamento da minha encomenda específica?</summary>
+          <p>Não. O material é um livro didático explicativo que ensina como você mesmo consulta, interpreta e resolve questões de frete e prazos nos canais oficiais das transportadoras.</p>
+        </details>
+
+        <details>
+          <summary>Qual a garantia de satisfação?</summary>
+          <p>Oferecemos 7 dias de garantia incondicional conforme o Código de Defesa do Consumidor (Artigo 49). Se o conteúdo não atender às suas expectativas, basta solicitar o reembolso integral pelo nosso e-mail de suporte.</p>
+        </details>
+
+        <details>
+          <summary>Como entrar em contato com a equipe responsável?</summary>
+          <p>Nosso atendimento responde de segunda a sexta-feira, das 09h às 18h, pelo e-mail <strong>schilipak77@gmail.com</strong> ou WhatsApp <strong>(41) 99649-1100</strong>.</p>
+        </details>
       </div>
-    </aside>
+    </section>
   </main>
 
   <footer>
-    <div class="footer-container">
-      <div>
-        <p>© 2026 João Consultoria & Guia Empresarial. Todos os direitos reservados.</p>
-        <p style="font-size:0.78rem; margin-top:4px; color:#64748b;">CNPJ: 42.189.304/0001-52 • São Paulo - SP</p>
+    <div class="wrap">
+      <div class="footer-grid">
+        <div class="footer-col">
+          <h4>68.431.067 Joao Victor Antunes Schilipak Contatos</h4>
+          <p><strong>CNPJ:</strong> 68.431.067/0001-14</p>
+          <p><strong>Endereço:</strong> Rua Miguel Caluf, 1535 — Bairro Cajuru</p>
+          <p><strong>Localização:</strong> Curitiba - Paraná • CEP: 82940-110</p>
+        </div>
+
+        <div class="footer-col">
+          <h4>Atendimento ao Cliente</h4>
+          <p><strong>E-mail:</strong> schilipak77@gmail.com</p>
+          <p><strong>WhatsApp / Telefone:</strong> (41) 99649-1100</p>
+          <p>Horário: Segunda a Sexta, das 09:00 às 18:00</p>
+          <div class="footer-links">
+            <a onclick="openModal('modalPrivacidade')">Política de Privacidade</a>
+            <a onclick="openModal('modalTermos')">Termos de Uso</a>
+          </div>
+        </div>
       </div>
-      <div class="footer-links">
-        <a onclick="openModal('modalPrivacidade')">Política de Privacidade</a>
-        <a onclick="openModal('modalTermos')">Termos de Uso</a>
+
+      <div class="footer-bottom">
+        © 2026 68.431.067 Joao Victor Antunes Schilipak Contatos. Todos os direitos reservados.
       </div>
     </div>
   </footer>
 
+  <!-- Modal Privacidade -->
   <div id="modalPrivacidade" class="modal">
     <div class="modal-content">
       <div class="modal-header">
         <h3>Política de Privacidade</h3>
         <button class="modal-close" onclick="closeModal('modalPrivacidade')">&times;</button>
       </div>
-      <p style="font-size:0.9rem; color:#475569; margin-bottom:12px;">A sua privacidade é fundamental para nós. Esta política descreve como coletamos e protegemos informações durante sua navegação neste portal informativo e institucional.</p>
-      <p style="font-size:0.9rem; color:#475569; margin-bottom:12px;">1. Não comercializamos dados pessoais de visitantes a terceiros sob nenhuma circunstância.</p>
-      <p style="font-size:0.9rem; color:#475569; margin-bottom:12px;">2. Cookies de navegação anônimos podem ser empregados exclusivamente para finalidades estatísticas e segurança da infraestrutura de servidores.</p>
-      <p style="font-size:0.9rem; color:#475569; margin-bottom:12px;">3. Em conformidade com a Lei Geral de Proteção de Dados (LGPD - Lei 13.709/2018), você pode solicitar esclarecimentos via contato@joao-consultorguia.online.</p>
+      <div class="modal-body">
+        <p>A empresa <strong>68.431.067 Joao Victor Antunes Schilipak Contatos</strong> (CNPJ: 68.431.067/0001-14), com sede na Rua Miguel Caluf, 1535, Cajuru, Curitiba/PR, valoriza a privacidade e a segurança das informações de seus clientes e visitantes.</p>
+        <p><strong>1. Coleta de Informações:</strong> Coletamos dados cadastrais (nome, e-mail e telefone) fornecidos voluntariamente no momento de contato ou aquisição do produto digital para fins exclusivos de entrega do material e suporte.</p>
+        <p><strong>2. Tratamento e Sigilo:</strong> Não compartilhamos, vendemos ou alugamos dados a terceiros, exceto os necessários para o processamento de meios de pagamento e cumprimento de obrigações legais.</p>
+        <p><strong>3. Seus Direitos (LGPD):</strong> Em cumprimento à Lei Geral de Proteção de Dados (Lei 13.709/2018), o titular pode solicitar a qualquer momento a confirmação, correção ou exclusão de seus dados através do e-mail <strong>schilipak77@gmail.com</strong>.</p>
+      </div>
     </div>
   </div>
 
+  <!-- Modal Termos -->
   <div id="modalTermos" class="modal">
     <div class="modal-content">
       <div class="modal-header">
-        <h3>Termos de Uso</h3>
+        <h3>Termos e Condições de Uso</h3>
         <button class="modal-close" onclick="closeModal('modalTermos')">&times;</button>
       </div>
-      <p style="font-size:0.9rem; color:#475569; margin-bottom:12px;">1. Este website tem caráter exclusivamente informativo, educacional e de apresentação de serviços de consultoria e gestão empresarial.</p>
-      <p style="font-size:0.9rem; color:#475569; margin-bottom:12px;">2. Todo o conteúdo textual, estrutura gráfica e artigos são de titularidade do responsável pelo portal, sendo vedada a reprodução sem autorização prévia.</p>
-      <p style="font-size:0.9rem; color:#475569; margin-bottom:12px;">3. As orientações contidas nos artigos configuram recomendações de boas práticas e não substituem auditoria contábil formal individualizada.</p>
+      <div class="modal-body">
+        <p><strong>1. Objeto:</strong> O presente website disponibiliza informações sobre a publicação editorial digital "Guia Digital de Encomendas & Logística", de autoria e responsabilidade de 68.431.067 Joao Victor Antunes Schilipak Contatos.</p>
+        <p><strong>2. Caráter Informativo:</strong> O conteúdo fornecido é puramente educacional e orientativo, visando instruir consumidores sobre processos gerais de remessas e compras eletrônicas. Não substitui orientações individuais emitidas diretamente pelos canais oficiais de transportadoras ou autoridades aduaneiras.</p>
+        <p><strong>3. Propriedade Intelectual:</strong> Todos os textos, ilustrações e estruturação deste portal são protegidos pela legislação de direitos autorais, sendo vedada a reprodução total ou parcial sem consentimento prévio por escrito.</p>
+        <p><strong>4. Foro:</strong> Fica eleito o foro da Comarca de Curitiba, Estado do Paraná, para dirimir quaisquer controvérsias decorrentes destes termos.</p>
+      </div>
     </div>
   </div>
 
