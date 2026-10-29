@@ -1,7 +1,7 @@
 {
-  "name": "correios-xpay-pix",
+  "name": "correios-unipay-pix",
   "version": "1.0.0",
-  "description": "Funil Correios com Gateway XPay Brasil e Vercel",
+  "description": "Funil Correios com Gateway UniPay e Vercel",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"

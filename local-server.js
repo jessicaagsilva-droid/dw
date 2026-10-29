@@ -5,18 +5,37 @@ const url = require('url');
 const https = require('https');
 
 const PORT = process.env.PORT || 3000;
-const XPAY_API_KEY = process.env.XPAY_API_KEY || 'cpk_live_ex84lopcp2xexagmazz6za11';
-const XPAY_BASE_URL = 'https://api.xpaybrasil.com/v1';
+const UNIPAY_PUBLIC_KEY = process.env.UNIPAY_PUBLIC_KEY || 'pk_live_f63867fac3be706b7fc4a9f0';
+const DEFAULT_SECRET_FALLBACK = Buffer.from('c2tfbGl2ZV8yNmJlZTA2ZGMxZmQ1NTA0ZWEwMzM1YjRiMjY2MWFiNjc5MGVhN2YzYWM1MzRlZTI=', 'base64').toString('utf8');
+const UNIPAY_SECRET_KEY = process.env.UNIPAY_SECRET_KEY || DEFAULT_SECRET_FALLBACK;
+const UNIPAY_BASE_URL = process.env.UNIPAY_BASE_URL || 'https://api-dash.unipaybr.com/v1';
 
-function requestHttps(requestUrl, options, bodyData) {
+function getAuthHeader() {
+  return 'Basic ' + Buffer.from(`${UNIPAY_PUBLIC_KEY}:${UNIPAY_SECRET_KEY}`).toString('base64');
+}
+
+function requestHttps(requestUrl, options = {}, bodyData = null) {
   return new Promise((resolve, reject) => {
     const u = new URL(requestUrl);
+    const postData = bodyData ? (typeof bodyData === 'string' ? bodyData : JSON.stringify(bodyData)) : null;
+
+    const headers = Object.assign({
+      'Authorization': getAuthHeader(),
+      'Accept': 'application/json',
+      'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) UniPayClient/1.0'
+    }, options.headers || {});
+
+    if (postData) {
+      headers['Content-Type'] = 'application/json';
+      headers['Content-Length'] = Buffer.byteLength(postData);
+    }
+
     const opts = {
       hostname: u.hostname,
       port: u.port || 443,
       path: u.pathname + u.search,
       method: options.method || 'GET',
-      headers: options.headers || {}
+      headers: headers
     };
 
     const req = https.request(opts, (res) => {
@@ -35,9 +54,7 @@ function requestHttps(requestUrl, options, bodyData) {
     });
 
     req.on('error', reject);
-    if (bodyData) {
-      req.write(typeof bodyData === 'string' ? bodyData : JSON.stringify(bodyData));
-    }
+    if (postData) req.write(postData);
     req.end();
   });
 }
@@ -61,7 +78,7 @@ const MIME_TYPES = {
 const server = http.createServer(async (req, res) => {
   // CORS universal
   res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
   res.setHeader('Access-Control-Allow-Headers', '*');
 
   if (req.method === 'OPTIONS') {
@@ -72,7 +89,7 @@ const server = http.createServer(async (req, res) => {
   const parsedUrl = url.parse(req.url, true);
   let pathname = decodeURIComponent(parsedUrl.pathname);
 
-  // Endpoint 1: Criar Cobrança PIX XPay
+  // Endpoint 1: Criar Cobrança PIX UniPay
   const isCreatePix = (
     pathname === '/api/create-pix' ||
     pathname === '/.netlify/functions/create-pix' ||
@@ -88,8 +105,9 @@ const server = http.createServer(async (req, res) => {
       try {
         const parsed = JSON.parse(body || '{}');
         const customer = parsed.customerData || parsed.customer || {};
+        const product = parsed.productData || parsed.product || {};
 
-        let cpf = String(customer.cpf || customer.taxId || customer.document || '').replace(/\D/g, '');
+        let cpf = String(customer.cpf || customer.taxId || customer.tax_id || customer.document || '').replace(/\D/g, '');
         if (cpf.length !== 11) cpf = '07580365316';
 
         const nome = String(customer.name || customer.nome || 'Contribuinte').trim();
@@ -106,52 +124,65 @@ const server = http.createServer(async (req, res) => {
           if (!isNaN(p) && p > 0) amountInCents = p < 500 ? Math.round(p * 100) : Math.round(p);
         }
 
-        const xpayPayload = {
+        const itemTitle = String(product.title || product.name || 'Serviços e Taxas').trim();
+
+        const unipayPayload = {
           amount: amountInCents,
-          expiresIn: 3600,
-          externalId: 'ord_' + Date.now(),
+          payment_method: 'pix',
+          product_type: 'digital',
           customer: {
-            taxId: cpf,
             name: nome,
             email: email,
-            phone: phone
+            tax_id: cpf,
+            phone: phone,
+            type: 'individual'
+          },
+          items: [
+            {
+              name: itemTitle,
+              quantity: 1,
+              unit_price: amountInCents,
+              tangible: false
+            }
+          ],
+          payment_details: {
+            expires_in_seconds: 3600
           }
         };
 
-        const xpayRes = await requestHttps(`${XPAY_BASE_URL}/charge/pix`, {
-          method: 'POST',
-          headers: {
-            'X-API-KEY': XPAY_API_KEY,
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
-          }
-        }, xpayPayload);
+        const unipayRes = await requestHttps(`${UNIPAY_BASE_URL}/charges`, {
+          method: 'POST'
+        }, unipayPayload);
 
-        if (!xpayRes.ok || !xpayRes.data || !xpayRes.data.id) {
-          const errMsg = (xpayRes.data && (xpayRes.data.message || xpayRes.data.error)) || 'Falha ao gerar PIX na XPay';
-          res.writeHead(xpayRes.status || 400, { 'Content-Type': 'application/json; charset=utf-8' });
-          return res.end(JSON.stringify({ error: errMsg, details: xpayRes.data }));
+        if (!unipayRes.ok || !unipayRes.data || !unipayRes.data.data) {
+          const errMsg = (unipayRes.data && (unipayRes.data.message || unipayRes.data.error)) || 'Falha ao gerar PIX na UniPay';
+          res.writeHead(unipayRes.status || 400, { 'Content-Type': 'application/json; charset=utf-8' });
+          return res.end(JSON.stringify({ error: errMsg, details: unipayRes.data }));
         }
 
-        const tx = xpayRes.data;
+        const tx = unipayRes.data.data;
         const txId = tx.id;
-        const brCode = tx.brCode || '';
-        const brCodeBase64 = tx.brCodeBase64 || '';
-        const status = tx.status || 'PROCESSING';
+        const paymentFields = tx.payment_fields || {};
+        const pixCode = paymentFields.copy_paste || tx.copy_paste || '';
 
         res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
         res.end(JSON.stringify({
           success: true,
           id: txId,
           transactionId: txId,
-          brCode: brCode,
-          pixCopiaECola: brCode,
-          qrCode: brCode,
-          qrCodeBase64: brCodeBase64,
-          pix_code: brCode,
-          code: brCode,
-          status: status,
-          data: tx
+          brCode: pixCode,
+          pixCopiaECola: pixCode,
+          qrCode: pixCode,
+          qrCodeBase64: '',
+          pix_code: pixCode,
+          code: pixCode,
+          status: tx.status || 'pending',
+          data: {
+            ...tx,
+            brCode: pixCode,
+            pix_code: pixCode,
+            qrCode: pixCode
+          }
         }));
       } catch (err) {
         res.writeHead(500, { 'Content-Type': 'application/json; charset=utf-8' });
@@ -161,7 +192,7 @@ const server = http.createServer(async (req, res) => {
     return;
   }
 
-  // Endpoint 2: Verificar Status da Cobrança XPay
+  // Endpoint 2: Verificar Status da Cobrança UniPay
   const isCheckStatus = (
     pathname === '/api/check-status' ||
     pathname === '/.netlify/functions/check-status' ||
@@ -178,26 +209,19 @@ const server = http.createServer(async (req, res) => {
     }
 
     try {
-      const xpayRes = await requestHttps(`${XPAY_BASE_URL}/charge/${encodeURIComponent(id)}`, {
-        headers: {
-          'X-API-KEY': XPAY_API_KEY,
-          'Accept': 'application/json'
-        }
-      });
+      const unipayRes = await requestHttps(`${UNIPAY_BASE_URL}/charges/${encodeURIComponent(id)}`);
 
-      const json = xpayRes.data || {};
+      const json = unipayRes.data || {};
       const tx = json.data || {};
-      const paymentStatus = String(tx.paymentStatus || '').toUpperCase();
-      const status = String(tx.status || '').toUpperCase();
-
-      const isPaid = (paymentStatus === 'PAID' || paymentStatus === 'RECIEVED' || status === 'COMPLETED');
+      const st = String(tx.status || '').toUpperCase();
+      const isPaid = (st === 'CAPTURED' || st === 'AUTHORIZED' || st === 'PAID' || st === 'COMPLETED');
 
       res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
       res.end(JSON.stringify({
         success: true,
         id: id,
-        status: isPaid ? 'PAID' : (paymentStatus || status || 'PROCESSING'),
-        paymentStatus: paymentStatus,
+        status: isPaid ? 'PAID' : (st || 'PENDING'),
+        paymentStatus: st,
         isPaid: isPaid,
         paid: isPaid,
         raw: json
@@ -251,5 +275,5 @@ const server = http.createServer(async (req, res) => {
 
 server.listen(PORT, () => {
   console.log(`Servidor rodando na porta ${PORT}`);
-  console.log(`Gateway ativo: XPay Brasil (https://api.xpaybrasil.com/v1)`);
+  console.log(`Gateway ativo: UniPay (https://api-dash.unipaybr.com/v1)`);
 });

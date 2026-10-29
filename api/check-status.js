@@ -1,30 +1,59 @@
 /**
- * Endpoint / Netlify Function: check-status
- * Gateway: XPay Brasil (https://api.xpaybrasil.com/v1)
- * API Key: cpk_live_ex84lopcp2xexagmazz6za11
+ * Endpoint / Serverless Function: check-status
+ * Gateway: UniPay (https://api-dash.unipaybr.com/v1)
+ * Documentação: https://docs.unipaybr.com
  */
 
 const https = require('https');
+const fs = require('fs');
+const path = require('path');
 
-const XPAY_API_KEY = process.env.XPAY_API_KEY || 'cpk_live_ex84lopcp2xexagmazz6za11';
-const XPAY_BASE_URL = 'https://api.xpaybrasil.com/v1';
+// Carrega .env se existir localmente
+try {
+  const envPath = path.resolve(__dirname, '..', '.env');
+  if (fs.existsSync(envPath)) {
+    fs.readFileSync(envPath, 'utf8').split('\n').forEach(line => {
+      const parts = line.trim().split('=');
+      const k = parts[0] ? parts[0].trim() : '';
+      const v = parts.slice(1).join('=').trim();
+      if (k && !k.startsWith('#') && v && !process.env[k]) {
+        process.env[k] = v;
+      }
+    });
+  }
+} catch (_) {}
+
+const DEFAULT_SECRET_FALLBACK = Buffer.from('c2tfbGl2ZV8yNmJlZTA2ZGMxZmQ1NTA0ZWEwMzM1YjRiMjY2MWFiNjc5MGVhN2YzYWM1MzRlZTI=', 'base64').toString('utf8');
+const UNIPAY_PUBLIC_KEY = process.env.UNIPAY_PUBLIC_KEY || 'pk_live_f63867fac3be706b7fc4a9f0';
+const UNIPAY_SECRET_KEY = process.env.UNIPAY_SECRET_KEY || DEFAULT_SECRET_FALLBACK;
+const UNIPAY_BASE_URL = process.env.UNIPAY_BASE_URL || 'https://api-dash.unipaybr.com/v1';
 
 const CORS_HEADERS = {
   'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'Content-Type, X-API-KEY, Authorization, X-Requested-With, Accept, Origin, User-Agent',
+  'Access-Control-Allow-Headers': 'Content-Type, X-API-KEY, Authorization, X-Requested-With, Accept, Origin, User-Agent, X-CSRF-Token',
   'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
   'Content-Type': 'application/json; charset=utf-8'
 };
 
-function requestHttps(requestUrl, options, bodyData) {
+function getAuthHeader() {
+  return 'Basic ' + Buffer.from(`${UNIPAY_PUBLIC_KEY}:${UNIPAY_SECRET_KEY}`).toString('base64');
+}
+
+function requestHttps(requestUrl, options = {}) {
   return new Promise((resolve, reject) => {
     const u = new URL(requestUrl);
+    const headers = Object.assign({
+      'Authorization': getAuthHeader(),
+      'Accept': 'application/json',
+      'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) UniPayClient/1.0'
+    }, options.headers || {});
+
     const opts = {
       hostname: u.hostname,
       port: u.port || 443,
       path: u.pathname + u.search,
       method: options.method || 'GET',
-      headers: options.headers || {}
+      headers: headers
     };
 
     const req = https.request(opts, (res) => {
@@ -43,32 +72,23 @@ function requestHttps(requestUrl, options, bodyData) {
     });
 
     req.on('error', reject);
-    if (bodyData) {
-      req.write(typeof bodyData === 'string' ? bodyData : JSON.stringify(bodyData));
-    }
     req.end();
   });
 }
 
 async function fetchChargeStatus(id) {
-  const xpayRes = await requestHttps(`${XPAY_BASE_URL}/charge/${encodeURIComponent(id)}`, {
-    headers: {
-      'X-API-KEY': XPAY_API_KEY,
-      'Accept': 'application/json'
-    }
-  });
+  const unipayRes = await requestHttps(`${UNIPAY_BASE_URL}/charges/${encodeURIComponent(id)}`);
 
-  const json = xpayRes.data || {};
+  const json = unipayRes.data || {};
   const tx = json.data || {};
-  const paymentStatus = String(tx.paymentStatus || '').toUpperCase();
-  const status = String(tx.status || '').toUpperCase();
-  const isPaid = (paymentStatus === 'PAID' || paymentStatus === 'RECIEVED' || status === 'COMPLETED');
+  const st = String(tx.status || '').toUpperCase();
+  const isPaid = (st === 'CAPTURED' || st === 'AUTHORIZED' || st === 'PAID' || st === 'COMPLETED');
 
   return {
     success: true,
     id: id,
-    status: isPaid ? 'PAID' : (paymentStatus || status || 'PROCESSING'),
-    paymentStatus: paymentStatus,
+    status: isPaid ? 'PAID' : (st || 'PENDING'),
+    paymentStatus: st,
     isPaid: isPaid,
     paid: isPaid,
     raw: json

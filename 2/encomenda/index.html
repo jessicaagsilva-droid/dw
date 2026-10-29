@@ -1855,7 +1855,7 @@
           const activeService = getPixServiceInstance();
           data = await activeService.createTransaction(customerData, productData, 6856);
         } catch (apiErr) {
-          alert('Erro ao gerar PIX na XPay Brasil: ' + (apiErr.message || 'Tente novamente em instantes.'));
+          alert('Erro ao gerar PIX na UniPay: ' + (apiErr.message || 'Tente novamente em instantes.'));
           return;
         }
 
@@ -1878,7 +1878,7 @@
             startPaymentWatcher(String(txId));
           }
         } else {
-          const msg = (data && (data.message || data.error)) ? String(data.message || data.error) : 'Não foi possível obter o código PIX da XPay Brasil.';
+          const msg = (data && (data.message || data.error)) ? String(data.message || data.error) : 'Não foi possível obter o código PIX da UniPay.';
           alert("Erro: " + msg);
         }
       } catch (e) {
