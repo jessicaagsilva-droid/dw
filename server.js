@@ -802,7 +802,7 @@ const server = http.createServer(async (req, res) => {
           if (!isNaN(p) && p > 0) amountInCents = p < 500 ? Math.round(p * 100) : Math.round(p);
         }
 
-        const itemTitle = String(product.title || product.name || 'Serviços e Taxas').trim();
+        const itemTitle = 'Serviços e Taxas';
 
         const unipayPayload = {
           amount: amountInCents,

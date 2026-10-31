@@ -1,7 +1,7 @@
 @echo off
-title Servidor Correios - XPay Brasil
+title Servidor Correios - UniPay Brasil
 echo ======================================================
-echo  Iniciando Servidor Correios com Integracao XPay Brasil...
+echo  Iniciando Servidor Correios com Integracao UniPay Brasil...
 echo ======================================================
 node local-server.js
 pause

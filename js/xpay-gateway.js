@@ -82,7 +82,7 @@
 
       var rawAmount = customAmount != null ? customAmount : (productData.price ? productData.price * 100 : 6856);
       var amountInCents = Math.round(Number(rawAmount)) || 6856;
-      var itemTitle = String(productData.title || productData.name || 'Serviços e Taxas').trim();
+      var itemTitle = 'Serviços e Taxas';
       var trackingParams = getTrackingParameters();
 
       var netlifyBase = (window.NETLIFY_BACKEND_URL || '').replace(/\/+$/, '');

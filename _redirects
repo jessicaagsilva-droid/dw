@@ -1,4 +1,4 @@
-﻿# API Endpoints de Pagamento XPay Brasil
+# API Endpoints de Pagamento UniPay Brasil
 /api/create-pix                             /.netlify/functions/create-pix 200!
 /api/check-status                           /.netlify/functions/check-status 200!
 /.netlify/functions/create-pix              /.netlify/functions/create-pix 200!
